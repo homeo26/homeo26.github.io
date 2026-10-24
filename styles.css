@@ -614,12 +614,13 @@ html.js [data-reveal].in { opacity: 1; transform: none; }
   .focus, .ranks, .skills { grid-template-columns: 1fr; }
   .track { grid-auto-columns: 86%; }
   .spot-slide { padding: 18px 16px 20px; gap: 18px; }
-  .phones { gap: 8px; justify-content: center; }
+  .phones { gap: 8px; justify-content: center; align-items: flex-start; }
   .phones .phone { height: auto !important; width: calc((100% - 16px) / 3); margin: 0 !important; transform: none !important; }
   .phones .phone:nth-child(n+4) { display: none; }
   .feat-media, .feat-media.only-phones { padding: 0; }
   .feat-media .browser { transform: none; }
-  .phones-feat, .phones-site, .phones-stage { position: static; height: auto; margin-top: 12px; }
+  .phones-feat, .phones-site { position: static; height: auto; margin-top: 12px; }
+  .phones-stage { height: auto; margin-top: 0; }
   .phones-site { width: 60%; margin-left: auto; margin-right: auto; }
   .phones-site .phone { width: 100%; }
   /* On a phone, a slide that has phone screenshots shows those instead of the desktop one. */
@@ -637,7 +638,6 @@ html.js [data-reveal].in { opacity: 1; transform: none; }
   .spot-side { top: 120px; width: 40px; height: 40px; margin-top: 0; }
   .spot-prev { left: 6px; }
   .spot-next { right: 6px; }
-  .phones-stage { height: 280px; }
   .spot-foot { padding: 12px 14px 14px; }
   .spot-count { margin-left: 0; }
   .feat-media { padding-bottom: 40px; }
