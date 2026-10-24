@@ -105,25 +105,32 @@ figure { margin: 0; }
   display: inline-flex; align-items: center; gap: 10px; font-size: 0.88rem; font-weight: 500; color: var(--ink);
   padding: 6px 14px; border: 1px solid var(--line-strong); border-radius: 999px; background: rgba(255, 255, 255, 0.85);
 }
-h1 { margin-top: 22px; font-size: clamp(2.75rem, 6.6vw, 5.2rem); letter-spacing: -0.035em; line-height: 1.02; }
-.lead { margin-top: 20px; max-width: 36ch; font-size: clamp(1.1rem, 1.6vw, 1.28rem); color: var(--ink); }
+h1 { margin-top: 0; font-size: clamp(2.75rem, 6.6vw, 5.2rem); letter-spacing: -0.035em; line-height: 1.02; }
+.role-title { margin-top: 14px; font-size: clamp(1.3rem, 2.5vw, 1.85rem); font-weight: 600; line-height: 1.25; color: var(--accent); letter-spacing: -0.015em; }
+.hero-loc { display: inline-flex; align-items: center; gap: 7px; margin-top: 10px; font-size: 0.95rem; color: var(--muted); }
+.hero-loc .lg { width: 16px; height: 16px; color: var(--muted); }
+.lead { margin-top: 18px; max-width: 36ch; font-size: clamp(1.1rem, 1.6vw, 1.28rem); color: var(--ink); }
 .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
 .stats { margin: 40px 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; border-top: 1px solid var(--line); padding-top: 22px; }
 .stats div { display: flex; flex-direction: column-reverse; gap: 6px; }
 .stats dt { font-size: 0.8rem; line-height: 1.35; color: var(--muted); }
+.stats .hl dd { color: var(--accent); }
+.stats .hl dt { color: var(--ink); font-weight: 600; }
 .stats dd { margin: 0; font: 700 clamp(1.55rem, 2.5vw, 2rem)/1 var(--sans); color: var(--navy); font-variant-numeric: tabular-nums; }
 
 .hero-visual { position: relative; align-self: stretch; min-height: 560px; }
 .halo {
-  position: absolute; right: -4%; bottom: calc(-1 * var(--hero-pb)); width: min(520px, 46vw); aspect-ratio: 1;
+  position: absolute; left: 50%; bottom: calc(-1 * var(--hero-pb)); width: min(520px, 46vw); margin-left: calc(min(520px, 46vw) / -2); aspect-ratio: 1;
   border-radius: 50%; background: radial-gradient(circle at 50% 45%, #cbe0fd 0%, #e3eeff 45%, rgba(234, 241, 255, 0) 70%);
   transform: translateY(18%);
 }
 .portrait {
-  position: absolute; z-index: 2; bottom: calc(-1 * var(--hero-pb));
-  right: calc((100vw - min(1160px, 100vw - 48px)) / -2);
+  position: absolute; z-index: 2; bottom: calc(-1 * var(--hero-pb)); left: 50%; transform: translateX(-50%);
   height: clamp(380px, 64svh, 600px); aspect-ratio: 588 / 1103;
-  -webkit-mask-image: linear-gradient(180deg, #000 86%, transparent); mask-image: linear-gradient(180deg, #000 86%, transparent);
+  -webkit-mask-image: linear-gradient(180deg, #000 86%, transparent), linear-gradient(270deg, transparent 0, #000 16%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(180deg, #000 86%, transparent), linear-gradient(270deg, transparent 0, #000 16%);
+  mask-composite: intersect;
   filter: drop-shadow(0 24px 40px rgba(11, 31, 58, 0.18));
 }
 .portrait img { width: 100%; height: 100%; }
@@ -226,19 +233,19 @@ html.js .year-panel[hidden] { display: none; }
 .a-beam { transform-box: view-box; transform-origin: 250px 64px; }
 
 .tl-item:is(:hover, :focus-within) .a-card { animation: nudge-x 1.4s var(--ease) infinite; }
-.tl-item:is(:hover, :focus-within) .a-wave, .card:is(:hover, :focus-within) .a-wave { animation: pulse 1.2s ease-in-out infinite; }
-.tl-item:is(:hover, :focus-within) .a-w2, .card:is(:hover, :focus-within) .a-w2 { animation-delay: 0.2s; }
+.tl-item:is(:hover, :focus-within) .a-wave, :is(.card:is(:hover, :focus-within), .spot-slide.active) .a-wave { animation: pulse 1.2s ease-in-out infinite; }
+.tl-item:is(:hover, :focus-within) .a-w2, :is(.card:is(:hover, :focus-within), .spot-slide.active) .a-w2 { animation-delay: 0.2s; }
 .tl-item:is(:hover, :focus-within) .a-check { animation: draw 0.7s var(--ease) both; }
-.tl-item:is(:hover, :focus-within) .a-gear, .card:is(:hover, :focus-within) .a-fan { animation: spin 2.6s linear infinite; }
+.tl-item:is(:hover, :focus-within) .a-gear, :is(.card:is(:hover, :focus-within), .spot-slide.active) .a-fan { animation: spin 2.6s linear infinite; }
 .tl-item:is(:hover, :focus-within) .a-flow { animation: flow 1.6s var(--ease) infinite; }
 .tl-item:is(:hover, :focus-within) .a-node { animation: node 1.6s steps(1) infinite; }
 .tl-item:is(:hover, :focus-within) .a-n2 { animation-delay: 0.45s; }
 .tl-item:is(:hover, :focus-within) .a-n3 { animation-delay: 0.9s; }
 .tl-item:is(:hover, :focus-within) .a-handset { animation: wiggle 1.4s ease-in-out infinite; }
-.tl-item:is(:hover, :focus-within) .a-bar, .card:is(:hover, :focus-within) .a-eq { animation: eq 0.9s ease-in-out infinite; }
-.tl-item:is(:hover, :focus-within) .a-b2, .card:is(:hover, :focus-within) .a-eq1 { animation-delay: 0.15s; }
-.tl-item:is(:hover, :focus-within) .a-b3, .card:is(:hover, :focus-within) .a-eq2 { animation-delay: 0.3s; }
-.card:is(:hover, :focus-within) .a-eq3 { animation-delay: 0.45s; }
+.tl-item:is(:hover, :focus-within) .a-bar, :is(.card:is(:hover, :focus-within), .spot-slide.active) .a-eq { animation: eq 0.9s ease-in-out infinite; }
+.tl-item:is(:hover, :focus-within) .a-b2, :is(.card:is(:hover, :focus-within), .spot-slide.active) .a-eq1 { animation-delay: 0.15s; }
+.tl-item:is(:hover, :focus-within) .a-b3, :is(.card:is(:hover, :focus-within), .spot-slide.active) .a-eq2 { animation-delay: 0.3s; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-eq3 { animation-delay: 0.45s; }
 .tl-item:is(:hover, :focus-within) .a-db { animation: bob 1.4s ease-in-out infinite; }
 .tl-item:is(:hover, :focus-within) .a-capg { animation: bob 1.3s ease-in-out infinite; }
 .tl-item:is(:hover, :focus-within) .a-tassel { animation: swing 1.3s ease-in-out infinite; }
@@ -246,34 +253,34 @@ html.js .year-panel[hidden] { display: none; }
 .tl-item:is(:hover, :focus-within) .a-gt { animation: out-r 1.3s ease-in-out infinite; }
 .tl-item:is(:hover, :focus-within) .a-book { animation: bob 1.3s ease-in-out 0.2s infinite; }
 
-.card:is(:hover, :focus-within) .a-route, .card:is(:hover, :focus-within) .a-fit { animation: draw100 1.4s var(--ease) both; }
-.card:is(:hover, :focus-within) .a-divider { animation: nudge-x 1.6s ease-in-out infinite; }
-.card:is(:hover, :focus-within) .a-dial { animation: dial 1.8s var(--ease) both; }
-.card:is(:hover, :focus-within) .a-j { animation: sweep 1.8s var(--ease) infinite; }
-.card:is(:hover, :focus-within) .a-j2 { animation-delay: 0.2s; }
-.card:is(:hover, :focus-within) .a-j3 { animation-delay: 0.4s; }
-.card:is(:hover, :focus-within) .a-prog { animation: fill-x 1.8s var(--ease) infinite; }
-.card:is(:hover, :focus-within) .a-car { animation: nudge-x 1.6s ease-in-out infinite; }
-.card:is(:hover, :focus-within) .a-c2 { animation-delay: 0.2s; }
-.card:is(:hover, :focus-within) .a-c3 { animation-delay: 0.4s; }
-.card:is(:hover, :focus-within) .a-seat { animation: seat 1.6s steps(1) infinite; }
-.card:is(:hover, :focus-within) .a-conf { animation: fill-x 1.8s var(--ease) both; }
-.card:is(:hover, :focus-within) .a-lane { animation: lane 0.8s linear infinite; }
-.card:is(:hover, :focus-within) .a-pt { animation: pop 0.5s var(--ease) both; }
-.card:is(:hover, :focus-within) .a-p1 { animation-delay: 0.05s; }
-.card:is(:hover, :focus-within) .a-p2 { animation-delay: 0.1s; }
-.card:is(:hover, :focus-within) .a-p3 { animation-delay: 0.15s; }
-.card:is(:hover, :focus-within) .a-p4 { animation-delay: 0.2s; }
-.card:is(:hover, :focus-within) .a-tn { animation: glow 1.5s ease-in-out infinite; }
-.card:is(:hover, :focus-within) .a-l1 { animation-delay: 0.25s; }
-.card:is(:hover, :focus-within) .a-l2 { animation-delay: 0.5s; }
-.card:is(:hover, :focus-within) .a-bub { animation: pop 0.5s var(--ease) both; }
-.card:is(:hover, :focus-within) .a-bub2 { animation-delay: 0.15s; }
-.card:is(:hover, :focus-within) .a-bub3 { animation-delay: 0.3s; }
-.card:is(:hover, :focus-within) .a-beam { animation: tilt 2s ease-in-out infinite; }
-.card:is(:hover, :focus-within) .a-cardg { animation: bob 1.4s ease-in-out infinite; }
-.card:is(:hover, :focus-within) .a-g2 { animation-delay: 0.2s; }
-.card:is(:hover, :focus-within) .a-play { animation: pulse-s 1.4s ease-in-out infinite; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-route, :is(.card:is(:hover, :focus-within), .spot-slide.active) .a-fit { animation: draw100 1.4s var(--ease) both; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-divider { animation: nudge-x 1.6s ease-in-out infinite; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-dial { animation: dial 1.8s var(--ease) both; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-j { animation: sweep 1.8s var(--ease) infinite; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-j2 { animation-delay: 0.2s; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-j3 { animation-delay: 0.4s; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-prog { animation: fill-x 1.8s var(--ease) infinite; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-car { animation: nudge-x 1.6s ease-in-out infinite; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-c2 { animation-delay: 0.2s; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-c3 { animation-delay: 0.4s; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-seat { animation: seat 1.6s steps(1) infinite; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-conf { animation: fill-x 1.8s var(--ease) both; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-lane { animation: lane 0.8s linear infinite; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-pt { animation: pop 0.5s var(--ease) both; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-p1 { animation-delay: 0.05s; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-p2 { animation-delay: 0.1s; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-p3 { animation-delay: 0.15s; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-p4 { animation-delay: 0.2s; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-tn { animation: glow 1.5s ease-in-out infinite; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-l1 { animation-delay: 0.25s; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-l2 { animation-delay: 0.5s; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-bub { animation: pop 0.5s var(--ease) both; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-bub2 { animation-delay: 0.15s; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-bub3 { animation-delay: 0.3s; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-beam { animation: tilt 2s ease-in-out infinite; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-cardg { animation: bob 1.4s ease-in-out infinite; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-g2 { animation-delay: 0.2s; }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .a-play { animation: pulse-s 1.4s ease-in-out infinite; }
 
 .focus-card:hover .lg-focus { animation: bob 1.2s ease-in-out infinite; }
 .f-pay:hover .lg-focus { animation-name: nudge-x; }
@@ -303,10 +310,28 @@ html.js .year-panel[hidden] { display: none; }
 @keyframes tilt { 0%, 100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg); } }
 
 /* ---------- Projects ---------- */
-.featured {
-  display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 40px; align-items: center; padding: 32px; margin-bottom: 48px;
-  border: 1px solid var(--line); border-radius: var(--r-lg); background: #fff; box-shadow: var(--shadow-md); overflow: hidden;
-}
+.spot { position: relative; margin-bottom: 56px; border: 1px solid var(--line); border-radius: var(--r-lg); background: #fff; box-shadow: var(--shadow-md); overflow: hidden; }
+.spot-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; }
+.spot-track::-webkit-scrollbar { display: none; }
+@media (prefers-reduced-motion: no-preference) { .spot-track { scroll-behavior: smooth; } }
+.spot-slide { flex: 0 0 100%; min-width: 0; scroll-snap-align: start; display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 40px; align-items: center; padding: 32px 32px 28px; }
+.spot-media .media { border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow-sm); }
+.spot-timer { height: 3px; background: var(--line); }
+.spot-timer span { display: block; height: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left center; }
+.spot-timer span.run { animation: spot-timer var(--spot-ms, 5500ms) linear forwards; }
+@keyframes spot-timer { to { transform: scaleX(1); } }
+.spot-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; padding: 14px 24px 16px; }
+.spot-dots { display: flex; flex-wrap: wrap; gap: 2px; }
+.spot-dot { position: relative; width: 30px; height: 36px; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.spot-dot::before { content: ""; position: absolute; left: 8px; right: 8px; top: 16px; height: 4px; border-radius: 2px; background: var(--line-strong); transition: background-color var(--t-fast) var(--ease), left var(--t-med) var(--ease), right var(--t-med) var(--ease); }
+.spot-dot:hover::before { background: var(--soft); }
+.spot-dot[aria-current="true"]::before { left: 2px; right: 2px; background: var(--accent); }
+.spot-count { margin-left: auto; font-size: 0.9rem; font-weight: 600; color: var(--muted); }
+.badge-public { display: inline-flex; align-items: center; gap: 8px; margin: 16px 0 14px; padding: 6px 12px 6px 10px; border-radius: 999px; font: 600 0.8rem/1.2 var(--sans); color: var(--navy); background: var(--bg-alt); border: 1px solid var(--line-strong); }
+.badge-public .lg { width: 16px; height: 16px; }
+.feat-ico { display: grid; place-items: center; width: 64px; height: 64px; flex: none; border-radius: 14px; border: 1px solid var(--line); background: var(--wash); }
+.feat-ico .lg { width: 30px; height: 30px; }
+.sub-head { width: 100%; font-size: 1.05rem; }
 .card-kicker { font-size: 0.75rem; color: var(--accent); letter-spacing: 0.02em; }
 .feat-title { display: flex; align-items: center; gap: 14px; margin-top: 12px; }
 .feat-logo { width: 64px; height: 64px; border-radius: 14px; border: 1px solid var(--line); background: #fff; }
@@ -340,10 +365,10 @@ html.js .year-panel[hidden] { display: none; }
 .phone img { width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 13px; }
 .phone:nth-child(odd) { transform: rotate(-5deg) translateY(8px); }
 .phone:nth-child(even) { transform: rotate(4deg) translateY(-6px); position: relative; z-index: 1; }
-.card:is(:hover, :focus-within) .phone:nth-child(1), .featured:hover .phone:nth-child(1) { transform: rotate(-9deg) translate(-14px, 10px); }
-.card:is(:hover, :focus-within) .phone:nth-child(2), .featured:hover .phone:nth-child(2) { transform: rotate(0) translateY(-14px); }
-.card:is(:hover, :focus-within) .phone:nth-child(3), .featured:hover .phone:nth-child(3) { transform: rotate(8deg) translate(14px, 6px); }
-.featured:hover .phone:nth-child(4) { transform: rotate(4deg) translate(10px, -18px); }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .phone:nth-child(1), .spot-slide.active .phone:nth-child(1) { transform: rotate(-9deg) translate(-14px, 10px); }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .phone:nth-child(2), .spot-slide.active .phone:nth-child(2) { transform: rotate(0) translateY(-14px); }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .phone:nth-child(3), .spot-slide.active .phone:nth-child(3) { transform: rotate(8deg) translate(14px, 6px); }
+.spot-slide.active .phone:nth-child(4) { transform: rotate(4deg) translate(10px, -18px); }
 
 .filters { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 26px; }
 .chip {
@@ -366,13 +391,13 @@ html.js .year-panel[hidden] { display: none; }
 .media-phones .phones { height: 108%; }
 .media-browser { display: grid; place-items: center; padding: 22px; background: linear-gradient(135deg, var(--wash), #dfeafd); }
 .media-browser .browser { width: 100%; transition: transform var(--t-slow) var(--ease); }
-.card:hover .media-browser .browser { transform: scale(1.04) rotate(-1deg); }
+:is(.card:hover, .spot-slide.active) .media-browser .browser { transform: scale(1.04) rotate(-1deg); }
 .media-site { padding: 16px 16px 0; background: linear-gradient(135deg, var(--wash), #dfeafd); }
 .media-site .browser { width: 82%; transition: transform var(--t-slow) var(--ease); }
 .phones-site { position: absolute; right: 14px; bottom: -14px; height: 80%; }
 .phones-site .phone { height: 100%; margin: 0; }
-.card:is(:hover, :focus-within) .media-site .browser { transform: translateY(-4px); }
-.card:is(:hover, :focus-within) .phones-site .phone { transform: rotate(0) translateY(-12px); }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .media-site .browser { transform: translateY(-4px); }
+:is(.card:is(:hover, :focus-within), .spot-slide.active) .phones-site .phone { transform: rotate(0) translateY(-12px); }
 .live {
   position: relative; z-index: 3; align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; margin-top: 12px;
   font-size: 0.88rem; font-weight: 600; color: var(--accent); border-bottom: 1px solid transparent;
@@ -510,13 +535,15 @@ html.js [data-reveal].in { opacity: 1; transform: none; }
 @media (max-width: 1020px) {
   .hero { --hero-pb: 0px; padding-top: 48px; }
   .hero-grid { grid-template-columns: 1fr; gap: 24px; }
-  .hero-visual { min-height: 460px; }
-  .portrait { height: 460px; right: -24px; }
-  .halo { width: 460px; right: -60px; }
+  .hero-visual { order: -1; min-height: 400px; }
+  .portrait { height: 400px; bottom: 0; }
+  .halo { width: 420px; margin-left: -210px; bottom: -40px; }
+  .hero-copy { text-align: left; }
   .focus { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ranks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .track { grid-auto-columns: calc((100% - 18px) / 2); }
-  .featured { grid-template-columns: 1fr; }
+  .spot-slide { grid-template-columns: 1fr; gap: 28px; }
+  .spot-slide .feat-media, .spot-slide .spot-media { order: -1; }
   .bar-list { grid-template-columns: 1fr; }
 }
 @media (max-width: 760px) {
@@ -528,9 +555,12 @@ html.js [data-reveal].in { opacity: 1; transform: none; }
   .nav-links a { padding: 8px 9px; font-size: 0.8rem; white-space: nowrap; }
   .wrap, .hero-grid { width: calc(100% - 32px); }
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero { padding-top: 20px; }
   .hero-visual { min-height: 0; display: flex; flex-direction: column; }
-  .hero-visual .halo, .hero-visual .orbit { display: none; }
-  .portrait { position: relative; right: auto; bottom: auto; height: 340px; align-self: center; }
+  .hero-visual .orbit { display: none; }
+  .hero-visual .halo { width: 300px; margin-left: -150px; bottom: -30px; }
+  .portrait { position: relative; left: auto; transform: none; bottom: auto; height: 300px; align-self: center; }
+  h1 { margin-top: 10px; }
   .section { padding: 80px 0; }
   .timeline::before, .tl-fill { left: 6px; }
   .tl-item { grid-template-columns: 1fr; gap: 10px; padding-left: 30px; }
@@ -541,7 +571,9 @@ html.js [data-reveal].in { opacity: 1; transform: none; }
   .focus, .ranks, .skills { grid-template-columns: 1fr; }
   .track { grid-auto-columns: 86%; }
   .car-head .count { margin-left: 0; width: auto; flex: 1; }
-  .featured { padding: 22px; gap: 28px; }
+  .spot-slide { padding: 20px 18px 22px; gap: 22px; }
+  .spot-foot { padding: 12px 14px 14px; }
+  .spot-count { margin-left: 0; }
   .feat-media { padding-bottom: 40px; }
   .phones-feat { height: 58%; }
   .bar-list li { grid-template-columns: 118px 1fr 18px; gap: 8px; }
@@ -553,7 +585,8 @@ html.js [data-reveal].in { opacity: 1; transform: none; }
   .nav-links { gap: 0; }
   .nav-links a { padding: 8px 7px; }
   .cta .btn { flex: 1 1 auto; justify-content: center; }
-  .portrait { height: 300px; }
+  .portrait { height: 260px; }
+  .hero-visual .halo { width: 260px; margin-left: -130px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -76,17 +76,18 @@ def media(p):
 
 # ---------------------------------------------------------------- sections
 def hero():
-    stats = "".join(f'<div><dt>{e(lbl)}</dt><dd data-count="{n}" data-suffix="{e(sfx)}">{e(txt)}</dd></div>'
-                    for txt, n, sfx, lbl in C.HERO_STATS)
+    stats = "".join(f'<div{" class=\"hl\"" if k == 0 else ""}><dt>{e(lbl)}</dt><dd data-count="{n}" data-suffix="{e(sfx)}">{e(txt)}</dd></div>'
+                    for k, (txt, n, sfx, lbl) in enumerate(C.HERO_STATS))
     orbit = "".join(f'<span class="orb" title="{e(name(s))}">{logo(s)}</span>' for s in C.ORBIT)
     return f'''
     <section class="hero" aria-labelledby="hero-title">
       <canvas class="field" aria-hidden="true"></canvas>
       <div class="wrap hero-grid">
         <div class="hero-copy">
-          <p class="eyebrow">Software Engineer at Amazon · Amman, Jordan</p>
           <h1 id="hero-title">Homam Manasra</h1>
-          <p class="lead">Software engineer. I build payment systems at Amazon, and ship Android, iOS and web apps on my own.</p>
+          <p class="role-title">{e(C.ROLE_TITLE)}</p>
+          <p class="hero-loc">{logo("globe", "lg")}{e(C.LOCATION)}</p>
+          <p class="lead">I build payment systems at Amazon, and ship Android, iOS and web apps on my own.</p>
           <div class="cta">
             <a class="btn btn-primary" href="#projects">See projects{logo("arrow", "lg lg-btn")}</a>
             {ext(C.GITHUB, "GitHub", icon="github")}
@@ -146,30 +147,6 @@ def experience():
     </section>'''
 
 
-def featured():
-    f = C.FEATURED
-    pts = "".join(f'<li>{logo(ic, "lg lg-pt")}<div><strong>{e(t)}</strong><span>{e(d)}</span></div></li>' for ic, t, d in f["points"])
-    return f'''
-        <article class="featured" data-reveal>
-          <div class="feat-copy">
-            <p class="card-kicker">{e(f["kicker"])}</p>
-            <div class="feat-title">
-              {img(f["logo"], 192, 192, f["title"] + " logo", "feat-logo")}
-              <h3>{e(f["title"])}</h3>
-            </div>
-            <p class="badge-private">{logo("lock", "lg")}Private repositories · source not public</p>
-            <p>{e(f["desc"])}</p>
-            <ul class="feat-points">{pts}</ul>
-            {tags(f["tags"])}
-            <div class="cta"><a class="btn btn-primary" href="{e(f["site"])}" data-fallback="{e(f["fallback"])}" target="_blank" rel="noopener noreferrer">Visit <span class="host">{e(f["site"].split("//", 1)[1])}</span>{logo("external", "lg lg-btn")}</a></div>
-          </div>
-          <div class="feat-media">
-            {browser(f["desktop"], "nasrapack.com")}
-            {phones(f["phones"], "phones phones-feat")}
-          </div>
-        </article>'''
-
-
 def live_link(p):
     if "live" not in p:
         return ""
@@ -177,6 +154,75 @@ def live_link(p):
     fb = f' data-fallback="{e(p["fallback"])}"' if p.get("fallback") else ""
     return (f'<a class="live" href="{e(p["live"])}"{fb} target="_blank" rel="noopener noreferrer">'
             f'{logo("globe", "lg")}<span class="host">{e(url)}</span>{logo("external", "lg")}</a>')
+
+
+def robou3_slide():
+    f = C.FEATURED
+    pts = "".join(f'<li>{logo(ic, "lg lg-pt")}<div><strong>{e(t)}</strong><span>{e(d)}</span></div></li>' for ic, t, d in f["points"])
+    visit = (f'<a class="btn btn-primary" href="{e(f["site"])}" data-fallback="{e(f["fallback"])}" target="_blank" rel="noopener noreferrer">'
+             f'Visit <span class="host">{e(f["site"].split("//", 1)[1])}</span>{logo("external", "lg lg-btn")}</a>')
+    return f'''
+            <article class="spot-slide" aria-roledescription="slide" aria-label="1 of {len(C.PROJECTS) + 1}: {e(f["title"])}">
+              <div class="feat-copy">
+                <p class="card-kicker">{e(f["kicker"])}</p>
+                <div class="feat-title">{img(f["logo"], 192, 192, f["title"] + " logo", "feat-logo", lazy=False)}<h3>{e(f["title"])}</h3></div>
+                <p class="badge-private">{logo("lock", "lg")}Private repositories · source not public</p>
+                <p>{e(f["desc"])}</p>
+                <ul class="feat-points">{pts}</ul>
+                {tags(f["tags"])}
+                <div class="cta">{visit}</div>
+              </div>
+              <div class="feat-media">
+                {browser(f["desktop"], "nasrapack.com", lazy=False)}
+                {phones(f["phones"], "phones phones-feat", lazy=False)}
+              </div>
+            </article>'''
+
+
+def public_slide(p, n, total):
+    nm = p.get("name", p["repo"])
+    live = ""
+    if p.get("live"):
+        url = p["live"].split("//", 1)[1].rstrip("/")
+        live = (f'<a class="btn btn-ghost" href="{e(p["live"])}" data-fallback="{e(p["fallback"])}" target="_blank" rel="noopener noreferrer">'
+                f'{logo("globe", "lg lg-btn")}<span class="host">{e(url)}</span>{logo("external", "lg lg-btn")}</a>')
+    return f'''
+            <article class="spot-slide" aria-roledescription="slide" aria-label="{n} of {total}: {e(nm)}">
+              <div class="feat-copy">
+                <p class="card-kicker">{e(p["kicker"])}</p>
+                <div class="feat-title"><span class="feat-ico">{logo("github", "lg")}</span><h3>{e(nm)}</h3></div>
+                <p class="badge-public">{logo("github", "lg")}Public repository · open source</p>
+                <p>{e(p["desc"])}</p>
+                {tags(p["tags"])}
+                <div class="cta">{ext(f"{C.GITHUB}/{p['repo']}", "View on GitHub", cls="btn btn-primary", icon="github")}{live}</div>
+              </div>
+              <div class="spot-media">{media(p)}</div>
+            </article>'''
+
+
+def spotlight():
+    by_repo = {p["repo"]: p for p in C.PROJECTS}
+    order = [by_repo[r] for r in C.SPOTLIGHT]
+    total = len(order) + 1
+    slides = robou3_slide() + "".join(public_slide(p, k + 2, total) for k, p in enumerate(order))
+    names = [C.FEATURED["title"]] + [p.get("name", p["repo"]) for p in order]
+    dots = "".join(f'<button type="button" class="spot-dot" data-i="{k}" aria-label="Show {e(nm)}"{" aria-current=\"true\"" if k == 0 else ""}></button>'
+                   for k, nm in enumerate(names))
+    return f'''
+        <div class="spot" data-spot data-reveal aria-roledescription="carousel" aria-label="Project spotlight">
+          <div class="spot-track" tabindex="0">{slides}
+          </div>
+          <div class="spot-timer" aria-hidden="true"><span></span></div>
+          <div class="spot-foot">
+            <div class="spot-dots" role="group" aria-label="Choose a project">{dots}</div>
+            <p class="spot-count" aria-live="polite">1 / {total}</p>
+            <div class="car-ctrl">
+              <button type="button" class="ctl" data-spot-ctl="prev" aria-label="Previous project">{logo("chev-l", "lg lg-btn")}</button>
+              <button type="button" class="ctl" data-spot-ctl="pause" aria-label="Pause slideshow" aria-pressed="false">{logo("pause", "lg lg-btn i-pause")}{logo("play", "lg lg-btn i-play")}</button>
+              <button type="button" class="ctl" data-spot-ctl="next" aria-label="Next project">{logo("chev-r", "lg lg-btn")}</button>
+            </div>
+          </div>
+        </div>'''
 
 
 def projects():
@@ -197,22 +243,21 @@ def projects():
             </div>
           </li>''')
     ctrl = (f'<div class="car-ctrl">'
-            f'<button type="button" class="ctl" data-car="prev" aria-label="Previous project">{logo("chev-l", "lg lg-btn")}</button>'
-            f'<button type="button" class="ctl" data-car="pause" aria-label="Pause auto-slide" aria-pressed="false">'
-            f'{logo("pause", "lg lg-btn i-pause")}{logo("play", "lg lg-btn i-play")}</button>'
-            f'<button type="button" class="ctl" data-car="next" aria-label="Next project">{logo("chev-r", "lg lg-btn")}</button></div>')
+            f'<button type="button" class="ctl" data-car="prev" aria-label="Previous projects">{logo("chev-l", "lg lg-btn")}</button>'
+            f'<button type="button" class="ctl" data-car="next" aria-label="Next projects">{logo("chev-r", "lg lg-btn")}</button></div>')
     return f'''
     <section class="section alt" id="projects" aria-labelledby="proj-title">
       <div class="wrap">
         {sec_head("02", "Projects", "proj-title", "Things I built outside work.")}
-        {featured()}
+        {spotlight()}
         <div class="carousel" data-carousel data-reveal>
           <div class="car-head">
+            <h3 class="sub-head">Browse by category</h3>
             <div class="filters" role="group" aria-label="Filter public projects">{chips}</div>
             <p class="count" aria-live="polite"><span id="proj-count">{len(C.PROJECTS)}</span> public projects</p>
             {ctrl}
           </div>
-          <ul class="track" id="proj-grid" tabindex="0" aria-label="Public projects, sliding automatically">{"".join(cards)}
+          <ul class="track" id="proj-grid" tabindex="0" aria-label="Public projects">{"".join(cards)}
           </ul>
           <div class="car-progress" aria-hidden="true"><span></span></div>
         </div>
@@ -318,12 +363,12 @@ PAGE = f'''<!doctype html>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://nasrapack.com https://greenbranchs.com; object-src 'none'; base-uri 'self'; form-action 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <title>Homam Manasra · Software Engineer</title>
-  <meta name="description" content="Homam Manasra, software engineer at Amazon in Amman, Jordan. Payment systems, Android, iOS and web projects, competitive programming.">
+  <title>Homam Manasra · Software Development Engineer</title>
+  <meta name="description" content="Homam Manasra, Software Development Engineer in Amman, Jordan, building payment systems at Amazon. Payment systems, Android, iOS and web projects, competitive programming.">
   <link rel="canonical" href="https://homeo26.github.io/">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Homam Manasra · Software Engineer">
-  <meta property="og:description" content="Software engineer at Amazon. Payment systems, Android, iOS and web projects, competitive programming.">
+  <meta property="og:title" content="Homam Manasra · Software Development Engineer">
+  <meta property="og:description" content="Software Development Engineer. Payment systems, Android, iOS and web projects, competitive programming.">
   <meta property="og:url" content="https://homeo26.github.io/">
   <meta property="og:image" content="https://homeo26.github.io/assets/portrait-contact.webp">
   <meta name="theme-color" content="#ffffff">
@@ -338,9 +383,9 @@ PAGE = f'''<!doctype html>
   <script src="script.js" defer></script>
   <script type="module" src="hero3d.js"></script>
 </head>
-<body>
+<body id="top">
   <a class="skip" href="#main">Skip to content</a>
-  <header class="nav" id="top">
+  <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="#top" aria-label="Homam Manasra, back to top"><img src="logo.svg" alt="" width="32" height="32"><span>Homam Manasra</span></a>
       <nav aria-label="Sections"><ul class="nav-links">{"".join(f'<li><a href="#{i}">{t}</a></li>' for i, t in NAV)}</ul></nav>

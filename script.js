@@ -211,18 +211,77 @@
     if (projectsSec) io.observe(projectsSec); else liveLinks.forEach(check);
   }
 
-  /* ---------- Project carousel: auto-slides; pauses on hover, keyboard focus, the pause button, or off-screen ---------- */
+  /* ---------- Project spotlight: one project at a time, advancing on its own ---------- */
+  const spot = $('[data-spot]');
+  if (spot) {
+    const track = $('.spot-track', spot);
+    const slides = $$('.spot-slide', spot);
+    const dots = $$('.spot-dot', spot);
+    const count = $('.spot-count', spot);
+    const bar = $('.spot-timer span', spot);
+    const btnPause = $('[data-spot-ctl="pause"]', spot);
+    const INTERVAL = 5500;
+    let idx = 0, timer = 0, hovered = false, focused = false, visible = false, userPaused = reduced();
+    bar.style.setProperty('--spot-ms', `${INTERVAL}ms`);
+    const mark = () => {
+      slides.forEach((sl, k) => { sl.classList.toggle('active', k === idx); sl.inert = k !== idx; });
+      dots.forEach((d, k) => (k === idx ? d.setAttribute('aria-current', 'true') : d.removeAttribute('aria-current')));
+      count.textContent = `${idx + 1} / ${slides.length}`;
+    };
+    const restartBar = on => {
+      bar.classList.remove('run');
+      if (on) { void bar.offsetWidth; bar.classList.add('run'); }
+    };
+    const running = () => !userPaused && !hovered && !focused && visible && !document.hidden;
+    const schedule = () => {
+      clearTimeout(timer); timer = 0;
+      const on = running();
+      restartBar(on);
+      if (on) timer = setTimeout(() => goTo(idx + 1), INTERVAL);
+    };
+    function goTo(i, smooth = true) {
+      idx = (i + slides.length) % slides.length;
+      track.scrollTo({ left: idx * track.clientWidth, behavior: smooth && !reduced() ? 'smooth' : 'auto' });
+      mark();
+      schedule();
+    }
+    // Swipes and trackpad scrolls settle on a slide; follow it.
+    let settle = 0;
+    track.addEventListener('scroll', () => {
+      clearTimeout(settle);
+      settle = setTimeout(() => {
+        const k = Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
+        if (k !== idx) { idx = k; mark(); schedule(); }
+      }, 140);
+    }, { passive: true });
+    track.addEventListener('pointerenter', () => { hovered = true; schedule(); });
+    track.addEventListener('pointerleave', () => { hovered = false; schedule(); });
+    track.addEventListener('focusin', () => { focused = true; schedule(); });
+    track.addEventListener('focusout', e => { if (!track.contains(e.relatedTarget)) { focused = false; schedule(); } });
+    track.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); goTo(idx + 1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(idx - 1); }
+    });
+    $('[data-spot-ctl="prev"]', spot).addEventListener('click', () => goTo(idx - 1));
+    $('[data-spot-ctl="next"]', spot).addEventListener('click', () => goTo(idx + 1));
+    dots.forEach((d, k) => d.addEventListener('click', () => goTo(k)));
+    const setPauseUi = () => {
+      btnPause.setAttribute('aria-pressed', String(userPaused));
+      btnPause.setAttribute('aria-label', userPaused ? 'Play slideshow' : 'Pause slideshow');
+    };
+    btnPause.addEventListener('click', () => { userPaused = !userPaused; setPauseUi(); schedule(); });
+    new IntersectionObserver(([en]) => { visible = en.isIntersecting; schedule(); }, { threshold: 0.35 }).observe(track);
+    document.addEventListener('visibilitychange', schedule);
+    addEventListener('resize', () => track.scrollTo({ left: idx * track.clientWidth, behavior: 'auto' }));
+    setPauseUi(); mark();
+    window.__spot = { running: () => timer !== 0, index: () => idx, interval: INTERVAL };
+  }
+
+  /* ---------- Browse row: filterable, scrolled with the arrows, a swipe or the keyboard ---------- */
   const car = $('[data-carousel]');
   if (car) {
     const track = $('.track', car);
     const bar = $('.car-progress span', car);
-    const btnPause = $('[data-car="pause"]', car);
-    const INTERVAL = 3800;
-    let timer = 0, hovered = false, focused = false, visible = false, userPaused = reduced();
-    const setPauseUi = () => {
-      btnPause.setAttribute('aria-pressed', String(userPaused));
-      btnPause.setAttribute('aria-label', userPaused ? 'Play auto-slide' : 'Pause auto-slide');
-    };
     const step = () => {
       const c = $('.card:not(.hide)', track);
       return c ? c.getBoundingClientRect().width + (parseFloat(getComputedStyle(track).columnGap) || 18) : track.clientWidth;
@@ -243,31 +302,19 @@
       bar.style.setProperty('--w', `${(vis * 100).toFixed(1)}%`);
       bar.style.setProperty('--x', `${(ratio * (1 - vis) * bar.parentElement.clientWidth).toFixed(1)}px`);
     };
-    const schedule = () => {
-      clearInterval(timer); timer = 0;
-      if (!userPaused && !hovered && !focused && visible && !document.hidden) timer = setInterval(() => go(1), INTERVAL);
-    };
     track.addEventListener('scroll', () => requestAnimationFrame(progress), { passive: true });
-    track.addEventListener('pointerenter', () => { hovered = true; schedule(); });
-    track.addEventListener('pointerleave', () => { hovered = false; schedule(); });
-    track.addEventListener('focusin', () => { focused = true; schedule(); });
-    track.addEventListener('focusout', e => { if (!track.contains(e.relatedTarget)) { focused = false; schedule(); } });
     track.addEventListener('keydown', e => {
       if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
       else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
     });
-    track.addEventListener('carousel:refresh', () => { track.scrollTo({ left: 0, behavior: 'auto' }); progress(); schedule(); });
-    $('[data-car="prev"]', car).addEventListener('click', () => { go(-1); schedule(); });
-    $('[data-car="next"]', car).addEventListener('click', () => { go(1); schedule(); });
-    btnPause.addEventListener('click', () => { userPaused = !userPaused; setPauseUi(); schedule(); });
-    new IntersectionObserver(([en]) => { visible = en.isIntersecting; schedule(); }, { threshold: 0.3 }).observe(track);
-    document.addEventListener('visibilitychange', schedule);
+    track.addEventListener('carousel:refresh', () => { track.scrollTo({ left: 0, behavior: 'auto' }); progress(); });
+    $('[data-car="prev"]', car).addEventListener('click', () => go(-1));
+    $('[data-car="next"]', car).addEventListener('click', () => go(1));
     addEventListener('resize', progress);
-    // Touch screens have no hover: mark slides in view so their illustration plays once.
+    // Touch screens have no hover: mark cards in view so their illustration plays once.
     const slideIO = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) en.target.classList.add('in'); }), { root: track, threshold: 0.6 });
     $$('.card', track).forEach(c => slideIO.observe(c));
-    setPauseUi(); progress();
-    window.__carousel = { running: () => timer !== 0, interval: INTERVAL };
+    progress();
   }
 
   /* ---------- Logos orbiting the portrait ---------- */

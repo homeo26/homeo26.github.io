@@ -9,12 +9,15 @@ LINKEDIN = "https://linkedin.com/in/homeo"
 CODEFORCES = "https://codeforces.com/profile/homeo"
 LEETCODE = "https://leetcode.com/u/homeo/"
 
+# The first stat is highlighted.
 HERO_STATS = [
+    ("10M+", 10, "M+", "Customers whose traffic my projects handle"),
+    ("100+", 100, "+", "Features & projects serving users"),
     ("3+", 3, "+", "Years shipping software"),
     ("2nd", 2, "nd", "Of 5,000+ in Amazon's internal coding contest"),
-    ("319th", 319, "th", "Worldwide at IEEExtreme 16"),
-    ("10+", 10, "+", "Public projects on GitHub"),
 ]
+ROLE_TITLE = "Software Development Engineer"
+LOCATION = "Amman, Jordan"
 
 # Logos that circle the portrait.
 ORBIT = ["openjdk", "kotlin", "typescript", "react", "python", "springboot", "aws", "android", "cplusplus", "firebase"]
@@ -23,7 +26,7 @@ EXPERIENCE = [
     {
         "art": "pay",
         "dates": ("2024-05", "May 2024", None, "Present"),
-        "role": "Software Engineer",
+        "role": "Software Development Engineer",
         "org": "Amazon",
         "where": "Amman, Jordan · Full-time",
         "summary": "Payments engineering across the checkout stack: backend payment services, payment data, "
@@ -64,7 +67,7 @@ EXPERIENCE = [
     {
         "art": "ci",
         "dates": ("2023-07", "Jul 2023", "2024-01", "Jan 2024"),
-        "role": "Software Engineer Intern",
+        "role": "Software Development Engineer Intern",
         "org": "Amazon",
         "where": "Amman, Jordan",
         "summary": "Joined the payments team while finishing my degree, and returned full-time after graduating. "
@@ -187,6 +190,11 @@ PROJECTS = [
      "desc": "A cipher that encodes text into a perfect tree; the key is the number of children per node.",
      "tags": ["cplusplus", ("tree", "Trees")], "media": ("art", "tree")},
 ]
+
+# Order of the auto-advancing project spotlight (Robou3 Al-Naserah is always first).
+SPOTLIGHT = ["green-branch", "coup-game", "roojifeel", "vid-shrink", "byd-split-launcher", "byd-dashvoice", "vac", "mashoora",
+             "engagement-carpool", "bloomberg-data-warehouse-progresssoft", "Machine-learning-on-online-education-",
+             "levelic-tree-cipher"]
 
 FILTERS = [("all", "All"), ("android", "Android"), ("mobile", "Mobile"), ("web", "Web"), ("tools", "Tools"), ("data", "Data")]
 
