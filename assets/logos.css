@@ -81,4 +81,11 @@
 .lg[data-l="play"]{color:#1e3a8a}
 .lg[data-l="chev-l"]{color:#1e3a8a}
 .lg[data-l="chev-r"]{color:#1e3a8a}
+.lg[data-l="mail"]{color:#1e3a8a}
+.lg[data-l="zoom"]{color:#1e3a8a}
+.lg[data-l="close"]{color:#1e3a8a}
 .lg[data-l="bell"]{color:#1e3a8a}
+.phone[data-ar="360x779"]{aspect-ratio:360/779}
+.phone[data-ar="360x780"]{aspect-ratio:360/780}
+.phone[data-ar="360x801"]{aspect-ratio:360/801}
+.phone[data-ar="360x802"]{aspect-ratio:360/802}

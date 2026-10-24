@@ -23,5 +23,8 @@ python3 -m http.server 8137 --bind 127.0.0.1   # preview
 | `assets/` | Portraits (background removed), project screenshots, logo sprite |
 | `vendor/three.module.min.js` | three.js r170 (MIT, see `vendor/LICENSE-three.txt`) |
 
+SEO: `robots.txt`, `sitemap.xml`, Open Graph / Twitter tags with `assets/og-image.png`, and schema.org Person + WebSite
+JSON-LD in the page head. After a deploy, submit `https://homeo26.github.io/sitemap.xml` in Google Search Console.
+
 Brand marks come from [Simple Icons](https://simpleicons.org) (CC0) and remain trademarks of their owners.
 Motion respects `prefers-reduced-motion`. The Content-Security-Policy allows scripts from this origin only.

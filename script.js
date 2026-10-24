@@ -168,7 +168,7 @@
           if (!reduced()) { void card.offsetWidth; card.classList.add('show'); }
         }
       });
-      count.textContent = String(n);
+      if (count) count.textContent = String(n);
       grid.dispatchEvent(new CustomEvent('carousel:refresh'));
     }));
     grid.addEventListener('animationend', e => e.target.classList?.remove('show'));
@@ -193,7 +193,9 @@
     const probed = new Map();
     const check = a => {
       const origin = new URL(a.href).origin;
-      if (!probed.has(origin)) probed.set(origin, reachable(origin + '/', 4000));
+      // One retry, so a single dropped request doesn't switch a healthy domain to its fallback.
+      if (!probed.has(origin)) probed.set(origin, reachable(origin + '/', 4000).then(ok => ok ||
+        new Promise(r => setTimeout(r, 1200)).then(() => reachable(origin + '/', 4000))));
       probed.get(origin).then(ok => {
         if (ok) return;
         a.href = a.dataset.fallback;
@@ -209,6 +211,26 @@
       liveLinks.forEach(check);
     }, { rootMargin: '600px 0px' });
     if (projectsSec) io.observe(projectsSec); else liveLinks.forEach(check);
+  }
+
+  /* ---------- Lightbox: any screenshot opens enlarged ---------- */
+  const lb = $('.lightbox');
+  if (lb && typeof lb.showModal === 'function') {
+    const lbImg = $('.lb-img', lb), cap = $('.lb-cap', lb);
+    document.addEventListener('click', e => {
+      const z = e.target.closest('.zoom');
+      if (!z) return;
+      e.preventDefault();
+      const im = $('img', z);
+      const w = Number(z.dataset.w), h = Number(z.dataset.h);
+      lbImg.src = z.dataset.zoom; lbImg.alt = im.alt; lbImg.width = w; lbImg.height = h;
+      lbImg.classList.toggle('is-phone', h > w);
+      cap.textContent = im.alt;
+      lb.showModal();
+      lb.dispatchEvent(new Event('opened'));
+    });
+    $('.lb-close', lb).addEventListener('click', () => lb.close());
+    lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
   }
 
   /* ---------- Project spotlight: one project at a time, advancing on its own ---------- */
@@ -232,7 +254,7 @@
       bar.classList.remove('run');
       if (on) { void bar.offsetWidth; bar.classList.add('run'); }
     };
-    const running = () => !userPaused && !hovered && !focused && visible && !document.hidden;
+    const running = () => !userPaused && !hovered && !focused && visible && !document.hidden && !(lb && lb.open);
     const schedule = () => {
       clearTimeout(timer); timer = 0;
       const on = running();
@@ -272,6 +294,7 @@
     btnPause.addEventListener('click', () => { userPaused = !userPaused; setPauseUi(); schedule(); });
     new IntersectionObserver(([en]) => { visible = en.isIntersecting; schedule(); }, { threshold: 0.35 }).observe(track);
     document.addEventListener('visibilitychange', schedule);
+    if (lb) { lb.addEventListener('opened', schedule); lb.addEventListener('close', schedule); }
     addEventListener('resize', () => track.scrollTo({ left: idx * track.clientWidth, behavior: 'auto' }));
     setPauseUi(); mark();
     window.__spot = { running: () => timer !== 0, index: () => idx, interval: INTERVAL };
@@ -324,7 +347,18 @@
   const orbs = $$('.orb');
   if (visual && portrait && portraitImg && orbs.length) {
     let geo = null, raf = 0, onScreen = true;
+    // Desktop: the photo's top lines up with the name; its height is capped by the hero's bottom.
+    const heroEl = $('.hero'), h1 = $('#hero-title');
+    const wide = matchMedia('(min-width: 1021px)');
+    const alignPortrait = () => {
+      if (!wide.matches) { portrait.style.removeProperty('top'); portrait.style.removeProperty('height'); return; }
+      const v = visual.getBoundingClientRect(), t = h1.getBoundingClientRect(), hb = heroEl.getBoundingClientRect().bottom;
+      const want = clamp(innerHeight * 0.64, 380, 600);
+      portrait.style.top = `${(t.top - v.top).toFixed(1)}px`;
+      portrait.style.height = `${Math.max(240, Math.min(want, hb - t.top)).toFixed(1)}px`;
+    };
     const measure = () => {
+      alignPortrait();
       if (!orbs[0].offsetParent) { geo = null; return; }
       const v = visual.getBoundingClientRect(), p = portrait.getBoundingClientRect();
       const rx = clamp(p.width * 0.92, 170, 320);
@@ -352,6 +386,8 @@
     };
     if (portraitImg.complete) run(); else portraitImg.addEventListener('load', run, { once: true });
     new ResizeObserver(run).observe(visual);
+    wide.addEventListener?.('change', run);
+    document.fonts?.ready.then(run);
     new IntersectionObserver(([en]) => { onScreen = en.isIntersecting; run(); }).observe(visual);
     document.addEventListener('visibilitychange', run);
     reduceMQ.addEventListener?.('change', run);

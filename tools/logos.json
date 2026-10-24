@@ -517,6 +517,21 @@
   "color": "#1e3a8a",
   "kind": "glyph"
  },
+ "mail": {
+  "title": "Email",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "zoom": {
+  "title": "Enlarge",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "close": {
+  "title": "Close",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
  "bell": {
   "title": "Notifications",
   "color": "#1e3a8a",

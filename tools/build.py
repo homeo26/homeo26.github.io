@@ -49,14 +49,20 @@ def img(src, w, h, alt, cls="", lazy=True):
     return f'<img{c} src="{src}" width="{w}" height="{h}" alt="{e(alt)}"{load}>'
 
 
+def zoom(shot, lazy):
+    src, w, h, alt = shot
+    return (f'<button type="button" class="zoom" data-zoom="{src}" data-w="{w}" data-h="{h}" aria-label="Enlarge: {e(alt)}">'
+            f'{img(*shot, lazy=lazy)}<span class="zoom-ico" aria-hidden="true">{logo("zoom", "lg")}</span></button>')
+
+
 def phones(shots, cls="phones", lazy=True):
-    figs = "".join(f'<figure class="phone">{img(*s, lazy=lazy)}</figure>' for s in shots)
+    figs = "".join(f'<figure class="phone" data-ar="{s[1]}x{s[2]}">{zoom(s, lazy)}</figure>' for s in shots)
     return f'<div class="{cls}">{figs}</div>'
 
 
 def browser(shot, url, lazy=True):
     return (f'<div class="browser"><div class="bbar" aria-hidden="true"><i></i><i></i><i></i><span>{e(url)}</span></div>'
-            f'{img(*shot, lazy=lazy)}</div>')
+            f'{zoom(shot, lazy)}</div>')
 
 
 def media(p):
@@ -84,14 +90,17 @@ def hero():
       <canvas class="field" aria-hidden="true"></canvas>
       <div class="wrap hero-grid">
         <div class="hero-copy">
-          <h1 id="hero-title">Homam Manasra</h1>
-          <p class="role-title">{e(C.ROLE_TITLE)}</p>
+          <div class="hero-name">
+            <h1 id="hero-title">Homam Manasra</h1>
+            <p class="role-title">{e(C.ROLE_TITLE)}</p>
+          </div>
           <p class="hero-loc">{logo("globe", "lg")}{e(C.LOCATION)}</p>
-          <p class="lead">I build payment systems at Amazon, and ship Android, iOS and web apps on my own.</p>
+          <p class="lead">{e(C.TAGLINE)}</p>
           <div class="cta">
             <a class="btn btn-primary" href="#projects">See projects{logo("arrow", "lg lg-btn")}</a>
             {ext(C.GITHUB, "GitHub", icon="github")}
             {ext(C.LINKEDIN, "LinkedIn", icon="linkedin")}
+            <a class="btn btn-ghost" href="mailto:{C.EMAIL}">{logo("mail", "lg lg-btn")}Email me</a>
           </div>
           <dl class="stats">{stats}</dl>
         </div>
@@ -196,8 +205,21 @@ def public_slide(p, n, total):
                 {tags(p["tags"])}
                 <div class="cta">{ext(f"{C.GITHUB}/{p['repo']}", "View on GitHub", cls="btn btn-primary", icon="github")}{live}</div>
               </div>
-              <div class="spot-media">{media(p)}</div>
+              {showcase(p)}
             </article>'''
+
+
+def showcase(p):
+    """Robou3-style media: a browser screenshot with phones over it, or a row of phones."""
+    sc = p.get("showcase")
+    if not sc:
+        return f'<div class="spot-media">{media(p)}</div>'
+    phones_html = phones(sc["phones"], "phones phones-feat", lazy=False) if sc.get("phones") else ""
+    if sc.get("desktop"):
+        over = (f'<div class="browser browser-over"><div class="bbar" aria-hidden="true"><i></i><i></i><i></i></div>{zoom(sc["overlay"], False)}</div>'
+                if sc.get("overlay") else "")
+        return f'<div class="feat-media">{browser(sc["desktop"], sc["url"], lazy=False)}{phones_html}{over}</div>'
+    return f'<div class="feat-media only-phones">{phones(sc["phones"], "phones phones-stage", lazy=False)}</div>'
 
 
 def spotlight():
@@ -210,16 +232,18 @@ def spotlight():
                    for k, nm in enumerate(names))
     return f'''
         <div class="spot" data-spot data-reveal aria-roledescription="carousel" aria-label="Project spotlight">
-          <div class="spot-track" tabindex="0">{slides}
+          <div class="spot-stage">
+            <div class="spot-track" tabindex="0">{slides}
+            </div>
+            <button type="button" class="spot-side spot-prev" data-spot-ctl="prev" aria-label="Previous project">{logo("chev-l", "lg lg-btn")}</button>
+            <button type="button" class="spot-side spot-next" data-spot-ctl="next" aria-label="Next project">{logo("chev-r", "lg lg-btn")}</button>
           </div>
           <div class="spot-timer" aria-hidden="true"><span></span></div>
           <div class="spot-foot">
             <div class="spot-dots" role="group" aria-label="Choose a project">{dots}</div>
             <p class="spot-count" aria-live="polite">1 / {total}</p>
             <div class="car-ctrl">
-              <button type="button" class="ctl" data-spot-ctl="prev" aria-label="Previous project">{logo("chev-l", "lg lg-btn")}</button>
               <button type="button" class="ctl" data-spot-ctl="pause" aria-label="Pause slideshow" aria-pressed="false">{logo("pause", "lg lg-btn i-pause")}{logo("play", "lg lg-btn i-play")}</button>
-              <button type="button" class="ctl" data-spot-ctl="next" aria-label="Next project">{logo("chev-r", "lg lg-btn")}</button>
             </div>
           </div>
         </div>'''
@@ -254,7 +278,6 @@ def projects():
           <div class="car-head">
             <h3 class="sub-head">Browse by category</h3>
             <div class="filters" role="group" aria-label="Filter public projects">{chips}</div>
-            <p class="count" aria-live="polite"><span id="proj-count">{len(C.PROJECTS)}</span> public projects</p>
             {ctrl}
           </div>
           <ul class="track" id="proj-grid" tabindex="0" aria-label="Public projects">{"".join(cards)}
@@ -266,25 +289,6 @@ def projects():
     </section>'''
 
 
-def tech_bars():
-    counts = {}
-    for p in [C.FEATURED] + C.PROJECTS:
-        for t in p["tags"]:
-            slug = t[0] if isinstance(t, tuple) else t
-            if slug not in GENERIC:
-                counts[slug] = counts.get(slug, 0) + 1
-    top = sorted(counts.items(), key=lambda kv: (-kv[1], name(kv[0])))[:8]
-    mx = top[0][1]
-    rows = "".join(f'<li><span class="bl">{logo(s)}{e(name(s))}</span>'
-                   f'<svg class="bt" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><rect width="100" height="10" rx="5" fill="#eef3fa"/>'
-                   f'<rect class="bf" width="{100 * n / mx:.1f}" height="10" rx="5"/></svg><b>{n}</b></li>' for s, n in top)
-    return f'''
-          <figure class="chart bars" data-reveal>
-            <figcaption><h3>Most-used technologies</h3><p>Number of my projects on this page that use each one.</p></figcaption>
-            <ul class="bar-list">{rows}</ul>
-          </figure>'''
-
-
 def skills():
     groups = "".join(f'<div class="skill-group" data-reveal><h3>{e(g)}</h3><ul class="logo-grid">' +
                      "".join(f'<li>{logo(s, "lg lg-tile")}<span>{e(name(s))}</span></li>' for s in items) +
@@ -294,7 +298,6 @@ def skills():
     <section class="section" id="skills" aria-labelledby="skills-title">
       <div class="wrap">
         {sec_head("03", "Skills", "skills-title")}
-        <div class="charts">{tech_bars()}</div>
         <div class="skills">{groups}
           <div class="skill-group practices" data-reveal><h3>Practices</h3><ul class="chips-plain">{prac}</ul></div>
         </div>
@@ -346,13 +349,30 @@ def contact():
           <ul class="platforms" data-reveal>{plats}</ul>
           <p class="skills-csv" data-reveal><strong>Skills:</strong> {e(csv)}</p>
           <div class="cta" data-reveal>
-            {ext(C.LINKEDIN, "Message on LinkedIn", cls="btn btn-primary", icon="linkedin")}
+            <a class="btn btn-primary" href="mailto:{C.EMAIL}">{logo("mail", "lg lg-btn")}Email me · {C.EMAIL}</a>
+            {ext(C.LINKEDIN, "Message on LinkedIn", icon="linkedin")}
             {ext(C.GITHUB, "github.com/homeo26", icon="github")}
           </div>
         </div>
       </div>
     </section>'''
 
+
+SITE = "https://homeo26.github.io/"
+DESC = ("Homam Manasra, Software Development Engineer in Amman, Jordan. Delivering software solutions: payment systems "
+        "at Amazon, plus Android, iOS and web apps.")
+LD = json.dumps([
+    {"@context": "https://schema.org", "@type": "Person", "@id": SITE + "#person", "name": "Homam Manasra",
+     "url": SITE, "image": SITE + "assets/portrait-contact.webp", "jobTitle": C.ROLE_TITLE,
+     "worksFor": {"@type": "Organization", "name": "Amazon"},
+     "alumniOf": {"@type": "CollegeOrUniversity", "name": "Jordan University of Science and Technology"},
+     "address": {"@type": "PostalAddress", "addressLocality": "Amman", "addressCountry": "JO"},
+     "email": "mailto:" + C.EMAIL, "sameAs": [C.GITHUB, C.LINKEDIN, C.CODEFORCES, C.LEETCODE],
+     "knowsAbout": ["Payment systems", "Distributed systems", "Android", "iOS", "React Native", "Java", "Kotlin",
+                    "TypeScript", "Python", "AWS", "Competitive programming"]},
+    {"@context": "https://schema.org", "@type": "WebSite", "name": "Homam Manasra", "url": SITE,
+     "author": {"@id": SITE + "#person"}, "inLanguage": "en"},
+], ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
 
 NAV = [("experience", "Experience"), ("projects", "Projects"), ("skills", "Skills"), ("contests", "Contests"), ("contact", "Contact")]
 
@@ -364,14 +384,32 @@ PAGE = f'''<!doctype html>
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://nasrapack.com https://greenbranchs.com; object-src 'none'; base-uri 'self'; form-action 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Homam Manasra · Software Development Engineer</title>
-  <meta name="description" content="Homam Manasra, Software Development Engineer in Amman, Jordan, building payment systems at Amazon. Payment systems, Android, iOS and web projects, competitive programming.">
-  <link rel="canonical" href="https://homeo26.github.io/">
-  <meta property="og:type" content="website">
+  <meta name="description" content="{e(DESC)}">
+  <meta name="author" content="Homam Manasra">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="{SITE}">
+  <meta property="og:type" content="profile">
+  <meta property="og:site_name" content="Homam Manasra">
+  <meta property="og:locale" content="en_US">
   <meta property="og:title" content="Homam Manasra · Software Development Engineer">
-  <meta property="og:description" content="Software Development Engineer. Payment systems, Android, iOS and web projects, competitive programming.">
-  <meta property="og:url" content="https://homeo26.github.io/">
-  <meta property="og:image" content="https://homeo26.github.io/assets/portrait-contact.webp">
+  <meta property="og:description" content="{e(DESC)}">
+  <meta property="og:url" content="{SITE}">
+  <meta property="og:image" content="{SITE}assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Homam Manasra, Software Development Engineer">
+  <meta property="profile:first_name" content="Homam">
+  <meta property="profile:last_name" content="Manasra">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Homam Manasra · Software Development Engineer">
+  <meta name="twitter:description" content="{e(DESC)}">
+  <meta name="twitter:image" content="{SITE}assets/og-image.png">
   <meta name="theme-color" content="#ffffff">
+  <link rel="me" href="{C.GITHUB}">
+  <link rel="me" href="{C.LINKEDIN}">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="sitemap" type="application/xml" href="sitemap.xml">
+  <script type="application/ld+json">{LD}</script>
   <link rel="icon" href="logo.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -393,6 +431,11 @@ PAGE = f'''<!doctype html>
   </header>
   <main id="main">{hero()}{experience()}{projects()}{skills()}{contests()}{contact()}
   </main>
+  <dialog class="lightbox" aria-label="Enlarged screenshot">
+    <button type="button" class="lb-close" aria-label="Close">{logo("close", "lg lg-btn")}</button>
+    <img class="lb-img" src="data:," alt="">
+    <p class="lb-cap"></p>
+  </dialog>
   <footer class="foot">
     <div class="wrap foot-inner">
       <span>© <span id="year">2026</span> Homam Manasra</span>
@@ -408,6 +451,9 @@ if re.search(r"[\u0600-\u06FF]", PAGE):
     raise SystemExit("Arabic script found in the page; use English only.")
 css = ["/* Generated by tools/build.py: logo colours, darkened where needed to reach 3:1 on white. */"]
 css += [f'.lg[data-l="{k}"]{{color:{v["color"]}}}' for k, v in LOGOS.items()]
+# Each phone frame takes its screenshot's exact proportions, so nothing is cropped or letterboxed.
+ratios = sorted(set(re.findall(r'class="phone" data-ar="(\d+)x(\d+)"', PAGE)))
+css += [f'.phone[data-ar="{w}x{h}"]{{aspect-ratio:{w}/{h}}}' for w, h in ratios]
 open(os.path.join(ROOT, "assets", "logos.css"), "w").write("\n".join(css) + "\n")
 open(os.path.join(ROOT, "index.html"), "w").write(PAGE)
 print(f"index.html {len(PAGE) // 1024} KB, {len(C.PROJECTS)} public projects + featured, {PAGE.count('<use ')} logo uses")

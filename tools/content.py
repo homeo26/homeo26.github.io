@@ -8,6 +8,7 @@ GITHUB = "https://github.com/homeo26"
 LINKEDIN = "https://linkedin.com/in/homeo"
 CODEFORCES = "https://codeforces.com/profile/homeo"
 LEETCODE = "https://leetcode.com/u/homeo/"
+EMAIL = "homam.manasra26@gmail.com"
 
 # The first stat is highlighted.
 HERO_STATS = [
@@ -17,6 +18,7 @@ HERO_STATS = [
     ("2nd", 2, "nd", "Of 5,000+ in Amazon's internal coding contest"),
 ]
 ROLE_TITLE = "Software Development Engineer"
+TAGLINE = "I deliver software solutions, from backend services to Android, iOS and web apps. At Amazon, I build payment systems."
 LOCATION = "Amman, Jordan"
 
 # Logos that circle the portrait.
@@ -142,6 +144,8 @@ PROJECTS = [
      "desc": "Shrinks large videos in place with the phone's hardware HEVC encoder. Verified replacement, idempotent "
              "re-runs, no Gradle, about 66 KB.",
      "tags": ["openjdk", "android", ("film", "MediaCodec")],
+     "showcase": {"phones": [("assets/shots/vidshrink-main.webp", 360, 801, "vid-shrink main screen"), ("assets/shots/vidshrink-scan.webp", 360, 801, "vid-shrink scanning for large videos"),
+                             ("assets/shots/vidshrink-progress.webp", 360, 801, "vid-shrink encoding progress")]},
      "media": ("phones", [("assets/shots/vidshrink-main.webp", 360, 801, "vid-shrink main screen"),
                           ("assets/shots/vidshrink-scan.webp", 360, 801, "vid-shrink scanning for large videos"),
                           ("assets/shots/vidshrink-progress.webp", 360, 801, "vid-shrink encoding progress")])},
@@ -153,12 +157,16 @@ PROJECTS = [
      "desc": "The bluffing card game Coup, online for 2–6 players with 4-letter room codes, plus offline bots. Arabic "
              "and English, no server.",
      "tags": ["reactnative", "expo", "firebase", "typescript"],
+     "showcase": {"phones": [("assets/shots/coup-home.webp", 360, 801, "Coup home screen"), ("assets/shots/coup-lobby.webp", 360, 801, "Coup lobby with a room code"),
+                             ("assets/shots/coup-table.webp", 360, 801, "Coup game table"), ("assets/shots/coup-arabic.webp", 360, 801, "Coup in Arabic")]},
      "media": ("phones", [("assets/shots/coup-home.webp", 360, 801, "Coup home screen"),
                           ("assets/shots/coup-table.webp", 360, 801, "Coup game table"),
                           ("assets/shots/coup-arabic.webp", 360, 801, "Coup in Arabic")])},
     {"repo": "roojifeel", "cat": "mobile", "kicker": "iOS · Android",
      "desc": "A private feelings journal built on the feelings wheel. Entries stay on the device.",
      "tags": ["reactnative", "expo", "sqlite", "typescript"],
+     "showcase": {"phones": [("assets/shots/rooji-wheel.webp", 360, 780, "Feelings wheel"), ("assets/shots/rooji-home.webp", 360, 780, "Journal home"),
+                             ("assets/shots/rooji-stats.webp", 360, 780, "Mood statistics"), ("assets/shots/rooji-log.webp", 360, 780, "Logging a feeling")]},
      "media": ("phones", [("assets/shots/rooji-wheel.webp", 360, 780, "Feelings wheel"),
                           ("assets/shots/rooji-home.webp", 360, 780, "Journal home"),
                           ("assets/shots/rooji-stats.webp", 360, 780, "Mood statistics")])},
@@ -167,12 +175,17 @@ PROJECTS = [
              "videos automatically, and consultation requests.",
      "tags": ["nextdotjs", "typescript", "tailwindcss", "framer"], "live": "https://greenbranchs.com",
      "fallback": "https://greenbranchs.netlify.app",
+     "showcase": {"desktop": ("assets/shots/greenbranch-desktop.webp", 1200, 750, "Green Branch website on desktop"), "url": "greenbranchs.com",
+                  "phones": [("assets/shots/greenbranch-phone.webp", 360, 779, "Green Branch home on a phone"),
+                             ("assets/shots/greenbranch-articles-phone.webp", 360, 779, "Green Branch articles on a phone"),
+                             ("assets/shots/greenbranch-videos-phone.webp", 360, 779, "Green Branch video library on a phone")]},
      "media": ("site", (("assets/shots/greenbranch-desktop.webp", 1200, 750, "Green Branch website on desktop"),
                         ("assets/shots/greenbranch-phone.webp", 360, 779, "Green Branch website on a phone")))},
     {"repo": "mashoora", "cat": "web", "kicker": "Web · Legal tech",
      "desc": "Legal consultation platform: paid private chat with lawyers, public legal Q&A, an AI legal chatbot and "
              "provider ratings.",
-     "tags": ["springboot", "flask", "postgresql", "firebase"], "media": ("art", "legal")},
+     "tags": ["springboot", "flask", "postgresql", "firebase"], "media": ("art", "legal"),
+     "showcase": {"desktop": ("assets/shots/mashoora-diagram.webp", 1400, 801, "Mashoora class diagram"), "url": "github.com/homeo26/mashoora"}},
     {"repo": "engagement-carpool", "cat": "web", "kicker": "Web · Local-first",
      "desc": "Plans event carpools: assign guests to cars, track confirmations, export to PDF. Auto-saves to YAML, no "
              "database.",
@@ -181,6 +194,8 @@ PROJECTS = [
      "desc": "FX deals warehouse modeled on Bloomberg's. Validates each row, rejects duplicate imports and persists "
              "without rollback.",
      "tags": ["springboot", "postgresql", "docker"],
+     "showcase": {"desktop": ("assets/shots/fx-console.webp", 1200, 572, "FX data warehouse console output"), "url": "github.com/homeo26/fx-data-warehouse",
+                  "overlay": ("assets/shots/fx-test1.webp", 900, 548, "FX data warehouse test case")},
      "media": ("browser", ("assets/shots/fx-banner.webp", 1200, 262, "FX data warehouse banner"))},
     {"repo": "Machine-learning-on-online-education-", "name": "grade-prediction", "cat": "data", "kicker": "Machine learning",
      "desc": "Predicts student grades on an online education platform from 20+ features, with cleaning, encoding, "

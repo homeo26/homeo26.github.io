@@ -53,6 +53,9 @@ GLYPHS = {
     "play": ("Play", '<path d="M8 5.5v13l10.5-6.5z"/>'),
     "chev-l": ("Previous", '<path d="m14.5 6-6 6 6 6"/>'),
     "chev-r": ("Next", '<path d="m9.5 6 6 6-6 6"/>'),
+    "mail": ("Email", '<rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/>'),
+    "zoom": ("Enlarge", '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5M10.5 8v5M8 10.5h5"/>'),
+    "close": ("Close", '<path d="M6 6l12 12M18 6 6 18"/>'),
     "bell": ("Notifications", '<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15z"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0"/>'),
 }
 
