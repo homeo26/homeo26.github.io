@@ -92,34 +92,6 @@
   }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
   revealEls.forEach(el => revealIO.observe(el));
 
-  /* ---------- Terminal typing ---------- */
-  const term = $('.term-body');
-  if (term && !reduced()) {
-    const lines = $$('.ln', term);
-    lines.forEach(l => l.classList.add('pending'));
-    const sleep = ms => new Promise(r => setTimeout(r, ms));
-    const run = async () => {
-      await sleep(350);
-      for (const line of lines) {
-        const cmd = $('.cmd', line);
-        if (cmd) {
-          const text = cmd.textContent;
-          cmd.textContent = '';
-          line.classList.remove('pending');
-          for (let i = 1; i <= text.length; i++) {
-            cmd.textContent = text.slice(0, i);
-            await sleep(34 + Math.random() * 40);
-          }
-          await sleep(220);
-        } else {
-          line.classList.remove('pending');
-          await sleep(line.classList.contains('out') ? 140 : 0);
-        }
-      }
-    };
-    run();
-  }
-
   /* ---------- Timeline progress ---------- */
   const timeline = $('.timeline');
   if (timeline) {
@@ -197,6 +169,7 @@
         }
       });
       count.textContent = String(n);
+      grid.dispatchEvent(new CustomEvent('carousel:refresh'));
     }));
     grid.addEventListener('animationend', e => e.target.classList?.remove('show'));
     grid.addEventListener('pointermove', e => {
@@ -208,11 +181,101 @@
     });
   }
 
+
+  /* ---------- Live-site links: if a custom domain doesn't answer, switch to the Netlify address ---------- */
+  const liveLinks = $$('a[data-fallback]');
+  if (liveLinks.length) {
+    // A no-cors request resolves for any HTTP answer and rejects on DNS, TLS or connection failure.
+    const reachable = (url, ms) => Promise.race([
+      fetch(url, { mode: 'no-cors', cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer' }).then(() => true, () => false),
+      new Promise(r => setTimeout(() => r(false), ms)),
+    ]);
+    const probed = new Map();
+    const check = a => {
+      const origin = new URL(a.href).origin;
+      if (!probed.has(origin)) probed.set(origin, reachable(origin + '/', 4000));
+      probed.get(origin).then(ok => {
+        if (ok) return;
+        a.href = a.dataset.fallback;
+        const host = $('.host', a);
+        if (host) host.textContent = new URL(a.dataset.fallback).host;
+        a.dataset.routed = 'fallback';
+      });
+    };
+    const projectsSec = $('#projects');
+    const io = new IntersectionObserver(([en]) => {
+      if (!en.isIntersecting) return;
+      io.disconnect();
+      liveLinks.forEach(check);
+    }, { rootMargin: '600px 0px' });
+    if (projectsSec) io.observe(projectsSec); else liveLinks.forEach(check);
+  }
+
+  /* ---------- Project carousel: auto-slides; pauses on hover, keyboard focus, the pause button, or off-screen ---------- */
+  const car = $('[data-carousel]');
+  if (car) {
+    const track = $('.track', car);
+    const bar = $('.car-progress span', car);
+    const btnPause = $('[data-car="pause"]', car);
+    const INTERVAL = 3800;
+    let timer = 0, hovered = false, focused = false, visible = false, userPaused = reduced();
+    const setPauseUi = () => {
+      btnPause.setAttribute('aria-pressed', String(userPaused));
+      btnPause.setAttribute('aria-label', userPaused ? 'Play auto-slide' : 'Pause auto-slide');
+    };
+    const step = () => {
+      const c = $('.card:not(.hide)', track);
+      return c ? c.getBoundingClientRect().width + (parseFloat(getComputedStyle(track).columnGap) || 18) : track.clientWidth;
+    };
+    const maxScroll = () => track.scrollWidth - track.clientWidth;
+    const go = dir => {
+      const m = maxScroll();
+      if (m <= 2) return;
+      let x = track.scrollLeft + dir * step();
+      if (dir > 0 && track.scrollLeft >= m - 4) x = 0;
+      else if (dir < 0 && track.scrollLeft <= 4) x = m;
+      track.scrollTo({ left: x, behavior: reduced() ? 'auto' : 'smooth' });
+    };
+    const progress = () => {
+      const vis = Math.min(1, track.clientWidth / Math.max(1, track.scrollWidth));
+      const m = maxScroll();
+      const ratio = m > 0 ? track.scrollLeft / m : 0;
+      bar.style.setProperty('--w', `${(vis * 100).toFixed(1)}%`);
+      bar.style.setProperty('--x', `${(ratio * (1 - vis) * bar.parentElement.clientWidth).toFixed(1)}px`);
+    };
+    const schedule = () => {
+      clearInterval(timer); timer = 0;
+      if (!userPaused && !hovered && !focused && visible && !document.hidden) timer = setInterval(() => go(1), INTERVAL);
+    };
+    track.addEventListener('scroll', () => requestAnimationFrame(progress), { passive: true });
+    track.addEventListener('pointerenter', () => { hovered = true; schedule(); });
+    track.addEventListener('pointerleave', () => { hovered = false; schedule(); });
+    track.addEventListener('focusin', () => { focused = true; schedule(); });
+    track.addEventListener('focusout', e => { if (!track.contains(e.relatedTarget)) { focused = false; schedule(); } });
+    track.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+    });
+    track.addEventListener('carousel:refresh', () => { track.scrollTo({ left: 0, behavior: 'auto' }); progress(); schedule(); });
+    $('[data-car="prev"]', car).addEventListener('click', () => { go(-1); schedule(); });
+    $('[data-car="next"]', car).addEventListener('click', () => { go(1); schedule(); });
+    btnPause.addEventListener('click', () => { userPaused = !userPaused; setPauseUi(); schedule(); });
+    new IntersectionObserver(([en]) => { visible = en.isIntersecting; schedule(); }, { threshold: 0.3 }).observe(track);
+    document.addEventListener('visibilitychange', schedule);
+    addEventListener('resize', progress);
+    // Touch screens have no hover: mark slides in view so their illustration plays once.
+    const slideIO = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) en.target.classList.add('in'); }), { root: track, threshold: 0.6 });
+    $$('.card', track).forEach(c => slideIO.observe(c));
+    setPauseUi(); progress();
+    window.__carousel = { running: () => timer !== 0, interval: INTERVAL };
+  }
+
   /* ---------- Logos orbiting the portrait ---------- */
   const visual = $('.hero-visual');
   const portrait = $('.portrait');
+  const portraitImg = $('.portrait img');
   const orbs = $$('.orb');
-  if (visual && portrait && orbs.length) {
+  if (visual && portrait && portraitImg && orbs.length) {
     let geo = null, raf = 0, onScreen = true;
     const measure = () => {
       if (!orbs[0].offsetParent) { geo = null; return; }
@@ -240,7 +303,7 @@
       if (reduced()) { place(0); return; }
       if (onScreen && !document.hidden && geo) raf = requestAnimationFrame(tick);
     };
-    if (portrait.complete) run(); else portrait.addEventListener('load', run, { once: true });
+    if (portraitImg.complete) run(); else portraitImg.addEventListener('load', run, { once: true });
     new ResizeObserver(run).observe(visual);
     new IntersectionObserver(([en]) => { onScreen = en.isIntersecting; run(); }).observe(visual);
     document.addEventListener('visibilitychange', run);

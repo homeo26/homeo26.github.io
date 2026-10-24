@@ -23,7 +23,7 @@ EXPERIENCE = [
     {
         "art": "pay",
         "dates": ("2024-05", "May 2024", None, "Present"),
-        "role": "Software Development Engineer I",
+        "role": "Software Engineer",
         "org": "Amazon",
         "where": "Amman, Jordan · Full-time",
         "summary": "Payments engineering across the checkout stack: backend payment services, payment data, "
@@ -64,7 +64,7 @@ EXPERIENCE = [
     {
         "art": "ci",
         "dates": ("2023-07", "Jul 2023", "2024-01", "Jan 2024"),
-        "role": "Software Development Engineer Intern",
+        "role": "Software Engineer Intern",
         "org": "Amazon",
         "where": "Amman, Jordan",
         "summary": "Joined the payments team while finishing my degree, and returned full-time after graduating. "
@@ -103,7 +103,6 @@ FOCUS = [
 ]
 
 FEATURED = {
-    "title_ar": "ربوع الناصرة",
     "title": "Robou3 Al-Naserah",
     "kicker": "Business platform · Web + iOS + Android",
     "desc": "Online catalog for a packaging-supply business in Amman. An Arabic right-to-left website, a customer app "
@@ -116,8 +115,9 @@ FEATURED = {
     ],
     "tags": ["typescript", "reactnative", "expo", "firebase", "netlify", "html5"],
     "site": "https://nasrapack.com",
+    "fallback": "https://lawazempack.netlify.app",  # used if the custom domain doesn't answer
     "logo": "assets/logo-robou3.webp",
-    "desktop": ("assets/shots/nasrapack-desktop.webp", 1200, 750, "The ربوع الناصرة website on desktop"),
+    "desktop": ("assets/shots/nasrapack-desktop.webp", 1200, 750, "Robou3 Al-Naserah website on desktop"),
     "phones": [
         ("assets/shots/nasrapack-phone.webp", 360, 779, "Website on a phone"),
         ("assets/shots/lzapp-home.webp", 360, 802, "Customer app home"),
@@ -162,7 +162,10 @@ PROJECTS = [
     {"repo": "green-branch", "cat": "web", "kicker": "Web · Arabic RTL",
      "desc": "Arabic agriculture content platform: categorized guides, a video library that pulls the latest channel "
              "videos automatically, and consultation requests.",
-     "tags": ["nextdotjs", "typescript", "tailwindcss", "framer"], "media": ("art", "green")},
+     "tags": ["nextdotjs", "typescript", "tailwindcss", "framer"], "live": "https://greenbranchs.com",
+     "fallback": "https://greenbranchs.netlify.app",
+     "media": ("site", (("assets/shots/greenbranch-desktop.webp", 1200, 750, "Green Branch website on desktop"),
+                        ("assets/shots/greenbranch-phone.webp", 360, 779, "Green Branch website on a phone")))},
     {"repo": "mashoora", "cat": "web", "kicker": "Web · Legal tech",
      "desc": "Legal consultation platform: paid private chat with lawyers, public legal Q&A, an AI legal chatbot and "
              "provider ratings.",
@@ -196,12 +199,6 @@ SKILLS = [
 ]
 PRACTICES = ["System design", "Distributed systems", "Concurrency", "Security reviews", "Algorithms", "TDD"]
 
-# GitHub language bytes across the public repos above (GitHub API, October 2026).
-LANG_BYTES = {"TypeScript": 880725, "Java": 478384, "Jupyter Notebook": 362423, "Python": 114705, "Shell": 25222,
-              "CSS": 21988, "JavaScript": 21458, "C++": 8014, "HTML": 6201, "Kotlin": 3674, "Ruby": 2892, "Swift": 2228}
-LANG_COLORS = {"TypeScript": "#2563eb", "Java": "#0b1f3a", "Jupyter Notebook": "#60a5fa", "Python": "#1e40af",
-               "Other": "#c9d5e8"}
-
 CONTESTS = [
     {"num": "2nd", "count": 2, "suffix": "nd", "of": "of 5,000+", "name": "Amazon internal coding competition",
      "year": "2023", "logo": "trophy", "ahead": 99.96},
@@ -217,9 +214,8 @@ CONTESTS = [
      "year": "2021–2024", "logo": "cap"},
 ]
 
-TERMINAL = [
-    ("cmd", "whoami"), ("out", "Homam Manasra, full-stack software engineer"),
-    ("cmd", "cat now.txt"), ("out", "SDE I at Amazon · payments · since May 2024"),
-    ("cmd", "ls focus/"), ("dirs", ["payments/", "event-driven-data/", "security/", "mobile/"]),
-    ("cmd", "git log --oneline -1"), ("em", ("vac", " cleanup CLI for AI coding-agent sessions")),
-]
+CONTACT_LINE = "I can build the software you need: a website, an iOS or Android app, a desktop app, or the backend behind them."
+PLATFORMS = [("globe", "Websites"), ("apple", "iOS"), ("android", "Android"), ("desktop", "Desktop"), ("server", "Backend & cloud")]
+
+# Skills line from the resume, verbatim and in order.
+RESUME_SKILLS = ['Python', 'Java', 'Kotlin', 'Groovy', 'Ruby', 'C++', 'JavaScript', 'TypeScript', 'Bash Scripting', 'HTML', 'CSS', 'React.js', 'React Native', 'Next.js', 'Spring', 'Android', 'SQL', 'NoSQL', 'Linux', 'Git', 'GitHub', 'Version Control', 'Docker', 'Kubernetes', 'CI/CD', 'Model Context Protocol MCP', 'Object-Oriented Programming OOP', 'Data Structures', 'Algorithms', 'Design Patterns', 'Software Design', 'Code Optimization', 'System Design', 'Distributed Systems', 'Scalability', 'Concurrency', 'Multithreading', 'Operating Systems', 'Computer Networks', 'Database Internals', 'Performance Engineering', 'RESTful API', 'SOAP', 'Unit Testing', 'TDD', 'Agile', 'Data Analysis', 'AI', 'Machine Learning', 'AWS', 'GCP', 'Security', 'Secure Internet Connection', 'Problem Solving']

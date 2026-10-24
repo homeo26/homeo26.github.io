@@ -2,8 +2,8 @@
 """Render index.html and assets/logos.css from tools/content.py. Run: python3 tools/build.py"""
 import html
 import json
-import math
 import os
+import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -49,23 +49,29 @@ def img(src, w, h, alt, cls="", lazy=True):
     return f'<img{c} src="{src}" width="{w}" height="{h}" alt="{e(alt)}"{load}>'
 
 
-def phones(shots, cls="phones"):
-    figs = "".join(f'<figure class="phone">{img(*s)}</figure>' for s in shots)
+def phones(shots, cls="phones", lazy=True):
+    figs = "".join(f'<figure class="phone">{img(*s, lazy=lazy)}</figure>' for s in shots)
     return f'<div class="{cls}">{figs}</div>'
 
 
-def browser(shot, url):
+def browser(shot, url, lazy=True):
     return (f'<div class="browser"><div class="bbar" aria-hidden="true"><i></i><i></i><i></i><span>{e(url)}</span></div>'
-            f'{img(*shot)}</div>')
+            f'{img(*shot, lazy=lazy)}</div>')
 
 
 def media(p):
     kind, val = p["media"]
     if kind == "art":
         return f'<div class="media media-art">{PROJECT_ART[val]}</div>'
+    if kind == "site":
+        desk, phone = val
+        url = p["live"].split("//", 1)[1].rstrip("/")
+        return (f'<div class="media media-site">{browser(desk, url, lazy=False)}'
+                f'{phones([phone], "phones phones-site", lazy=False)}</div>')
     if kind == "phones":
-        return f'<div class="media media-phones">{phones(val)}</div>'
-    return f'<div class="media media-browser">{browser(val, "github.com/homeo26/" + p.get("name", p["repo"]))}</div>'
+        return f'<div class="media media-phones">{phones(val, lazy=False)}</div>'
+    # Carousel slides load eagerly: lazy images inside a sideways scroller only load once a slide is reached.
+    return f'<div class="media media-browser">{browser(val, "github.com/homeo26/" + p.get("name", p["repo"]), lazy=False)}</div>'
 
 
 # ---------------------------------------------------------------- sections
@@ -73,26 +79,14 @@ def hero():
     stats = "".join(f'<div><dt>{e(lbl)}</dt><dd data-count="{n}" data-suffix="{e(sfx)}">{e(txt)}</dd></div>'
                     for txt, n, sfx, lbl in C.HERO_STATS)
     orbit = "".join(f'<span class="orb" title="{e(name(s))}">{logo(s)}</span>' for s in C.ORBIT)
-    lines = []
-    for kind, val in C.TERMINAL:
-        if kind == "cmd":
-            lines.append(f'<span class="ln"><span class="p">$</span> <span class="cmd">{e(val)}</span></span>')
-        elif kind == "out":
-            lines.append(f'<span class="ln out">{e(val)}</span>')
-        elif kind == "dirs":
-            lines.append('<span class="ln out">' + "  ".join(f"<b>{e(d)}</b>" for d in val) + "</span>")
-        else:
-            lines.append(f'<span class="ln out"><em>{e(val[0])}</em>{e(val[1])}</span>')
-    lines.append('<span class="ln"><span class="p">$</span> <span class="caret" aria-hidden="true"></span></span>')
-    term = "\n".join(lines)
     return f'''
     <section class="hero" aria-labelledby="hero-title">
       <canvas class="field" aria-hidden="true"></canvas>
       <div class="wrap hero-grid">
         <div class="hero-copy">
-          <p class="eyebrow mono"><span class="pulse" aria-hidden="true"></span>SDE I at Amazon · Amman, Jordan</p>
+          <p class="eyebrow">Software Engineer at Amazon · Amman, Jordan</p>
           <h1 id="hero-title">Homam Manasra</h1>
-          <p class="lead">Full-stack software engineer. I build payment systems at Amazon, and ship Android, React Native and web apps on my own.</p>
+          <p class="lead">Software engineer. I build payment systems at Amazon, and ship Android, iOS and web apps on my own.</p>
           <div class="cta">
             <a class="btn btn-primary" href="#projects">See projects{logo("arrow", "lg lg-btn")}</a>
             {ext(C.GITHUB, "GitHub", icon="github")}
@@ -103,11 +97,7 @@ def hero():
         <div class="hero-visual">
           <div class="halo" aria-hidden="true"></div>
           <div class="orbit" aria-hidden="true">{orbit}</div>
-          {img("assets/portrait-hero.webp", 589, 1103, "Portrait of Homam Manasra", "portrait", lazy=False)}
-          <figure class="term" aria-label="Summary in terminal form">
-            <div class="term-bar" aria-hidden="true"><i></i><i></i><i></i><span class="mono">~/homam</span></div>
-            <pre class="term-body mono"><code>{term}</code></pre>
-          </figure>
+          <div class="portrait">{img("assets/portrait-hero.webp", 588, 1103, "Portrait of Homam Manasra", lazy=False)}</div>
         </div>
       </div>
     </section>'''
@@ -115,7 +105,7 @@ def hero():
 
 def sec_head(idx, title, hid, note=None):
     n = f'<p class="sec-note">{e(note)}</p>' if note else ""
-    return f'<header class="sec-head" data-reveal><p class="mono idx">{idx}</p><h2 id="{hid}">{e(title)}</h2>{n}</header>'
+    return f'<header class="sec-head" data-reveal><p class="idx">{idx}</p><h2 id="{hid}">{e(title)}</h2>{n}</header>'
 
 
 def experience():
@@ -129,16 +119,16 @@ def experience():
             tabs = "".join(f'<button type="button" role="tab" id="yt-{y}" aria-controls="yp-{y}" aria-selected="{str(i == 0).lower()}"'
                            f'{"" if i == 0 else " tabindex=\"-1\""}>{y}</button>' for i, y in enumerate(ys))
             panels = "".join(f'<div class="year-panel" role="tabpanel" id="yp-{y}" aria-labelledby="yt-{y}" tabindex="0">'
-                             f'<h4 class="mono">{y}</h4><ul class="work">' + "".join(f"<li>{e(w)}</li>" for w in x["years"][y]) +
+                             f'<h4>{y}</h4><ul class="work">' + "".join(f"<li>{e(w)}</li>" for w in x["years"][y]) +
                              "</ul></div>" for y in ys)
             body += (f'<div class="years" data-tabs><div class="year-tabs" role="tablist" aria-label="Work by year">{tabs}</div>'
                      f'{panels}</div><p class="also">{e(x["also"])}</p>')
         items.append(f'''
           <li class="tl-item" data-reveal>
-            <div class="tl-meta"><p class="mono"><time datetime="{d0}">{l0}</time> – {end}</p>{EXP[x["art"]]}</div>
+            <div class="tl-meta"><p><time datetime="{d0}">{l0}</time> – {end}</p>{EXP[x["art"]]}</div>
             <div class="tl-card">
               <h3>{e(x["role"])} <span class="at">{e(x["org"])}</span></h3>
-              <p class="where mono">{e(x["where"])}</p>
+              <p class="where">{e(x["where"])}</p>
               {body}
               {tags(x["tags"])}
             </div>
@@ -162,22 +152,31 @@ def featured():
     return f'''
         <article class="featured" data-reveal>
           <div class="feat-copy">
-            <p class="card-kicker mono">{e(f["kicker"])}</p>
+            <p class="card-kicker">{e(f["kicker"])}</p>
             <div class="feat-title">
-              {img(f["logo"], 192, 192, "ربوع الناصرة logo", "feat-logo")}
-              <div><h3 lang="ar" dir="rtl">{e(f["title_ar"])}</h3><p class="feat-latin mono">{e(f["title"])}</p></div>
+              {img(f["logo"], 192, 192, f["title"] + " logo", "feat-logo")}
+              <h3>{e(f["title"])}</h3>
             </div>
             <p class="badge-private">{logo("lock", "lg")}Private repositories · source not public</p>
             <p>{e(f["desc"])}</p>
             <ul class="feat-points">{pts}</ul>
             {tags(f["tags"])}
-            <div class="cta">{ext(f["site"], "Visit nasrapack.com", cls="btn btn-primary", trailing="external")}</div>
+            <div class="cta"><a class="btn btn-primary" href="{e(f["site"])}" data-fallback="{e(f["fallback"])}" target="_blank" rel="noopener noreferrer">Visit <span class="host">{e(f["site"].split("//", 1)[1])}</span>{logo("external", "lg lg-btn")}</a></div>
           </div>
           <div class="feat-media">
             {browser(f["desktop"], "nasrapack.com")}
             {phones(f["phones"], "phones phones-feat")}
           </div>
         </article>'''
+
+
+def live_link(p):
+    if "live" not in p:
+        return ""
+    url = p["live"].split("//", 1)[1].rstrip("/")
+    fb = f' data-fallback="{e(p["fallback"])}"' if p.get("fallback") else ""
+    return (f'<a class="live" href="{e(p["live"])}"{fb} target="_blank" rel="noopener noreferrer">'
+            f'{logo("globe", "lg")}<span class="host">{e(url)}</span>{logo("external", "lg")}</a>')
 
 
 def projects():
@@ -187,57 +186,39 @@ def projects():
     for p in C.PROJECTS:
         nm = p.get("name", p["repo"])
         cards.append(f'''
-          <li class="card" data-cat="{p["cat"]}" data-reveal>
+          <li class="card" data-cat="{p["cat"]}">
             {media(p)}
             <div class="card-body">
-              <p class="card-kicker mono">{e(p["kicker"])}</p>
+              <p class="card-kicker">{e(p["kicker"])}</p>
               <h3><a href="{C.GITHUB}/{p["repo"]}" target="_blank" rel="noopener noreferrer">{e(nm)}</a>{logo("github", "lg lg-gh")}</h3>
               <p>{e(p["desc"])}</p>
+              {live_link(p)}
               {tags(p["tags"])}
             </div>
           </li>''')
+    ctrl = (f'<div class="car-ctrl">'
+            f'<button type="button" class="ctl" data-car="prev" aria-label="Previous project">{logo("chev-l", "lg lg-btn")}</button>'
+            f'<button type="button" class="ctl" data-car="pause" aria-label="Pause auto-slide" aria-pressed="false">'
+            f'{logo("pause", "lg lg-btn i-pause")}{logo("play", "lg lg-btn i-play")}</button>'
+            f'<button type="button" class="ctl" data-car="next" aria-label="Next project">{logo("chev-r", "lg lg-btn")}</button></div>')
     return f'''
     <section class="section alt" id="projects" aria-labelledby="proj-title">
       <div class="wrap">
         {sec_head("02", "Projects", "proj-title", "Things I built outside work.")}
         {featured()}
-        <div class="filters" role="group" aria-label="Filter public projects">{chips}
-          <p class="count mono" aria-live="polite"><span id="proj-count">{len(C.PROJECTS)}</span> public projects</p>
+        <div class="carousel" data-carousel data-reveal>
+          <div class="car-head">
+            <div class="filters" role="group" aria-label="Filter public projects">{chips}</div>
+            <p class="count" aria-live="polite"><span id="proj-count">{len(C.PROJECTS)}</span> public projects</p>
+            {ctrl}
+          </div>
+          <ul class="track" id="proj-grid" tabindex="0" aria-label="Public projects, sliding automatically">{"".join(cards)}
+          </ul>
+          <div class="car-progress" aria-hidden="true"><span></span></div>
         </div>
-        <ul class="grid" id="proj-grid">{"".join(cards)}
-        </ul>
         <div class="more">{ext(C.GITHUB + "?tab=repositories", "All repositories on GitHub", icon="github", trailing="external")}</div>
       </div>
     </section>'''
-
-
-def donut():
-    total = sum(C.LANG_BYTES.values())
-    top = sorted(C.LANG_BYTES.items(), key=lambda kv: -kv[1])[:4]
-    rows = top + [("Other", total - sum(v for _, v in top))]
-    r, sw = 54, 20
-    circ = 2 * math.pi * r
-    segs, legend, start = [], [], 0.0
-    for lang, v in rows:
-        frac = v / total
-        ln = max(frac * circ - 1.5, 0.5)
-        col = C.LANG_COLORS[lang]
-        segs.append(f'<circle class="seg" cx="70" cy="70" r="{r}" fill="none" stroke="{col}" stroke-width="{sw}" '
-                    f'stroke-dasharray="{ln:.2f} {circ:.2f}" stroke-dashoffset="{-start:.2f}" transform="rotate(-90 70 70)"/>')
-        legend.append(f'<li><i class="sw" data-c="{lang}"></i><span>{e(lang)}</span><b class="mono">{100 * frac:.1f}%</b></li>')
-        start += frac * circ
-    return f'''
-          <figure class="chart donut" data-reveal>
-            <figcaption><h3>Code by language</h3><p>Share of code in my public repos, as GitHub measures it.</p></figcaption>
-            <div class="donut-body">
-              <svg viewBox="0 0 140 140" role="img" aria-label="Code by language: {", ".join(f"{l} {100 * v / total:.0f}%" for l, v in rows)}">
-                <circle cx="70" cy="70" r="{r}" fill="none" stroke="#eef3fa" stroke-width="{sw}"/>{"".join(segs)}
-                <text x="70" y="66" text-anchor="middle" class="d-big">{len(C.LANG_BYTES)}</text>
-                <text x="70" y="84" text-anchor="middle" class="d-small">languages</text>
-              </svg>
-              <ul class="legend">{"".join(legend)}</ul>
-            </div>
-          </figure>'''
 
 
 def tech_bars():
@@ -251,7 +232,7 @@ def tech_bars():
     mx = top[0][1]
     rows = "".join(f'<li><span class="bl">{logo(s)}{e(name(s))}</span>'
                    f'<svg class="bt" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><rect width="100" height="10" rx="5" fill="#eef3fa"/>'
-                   f'<rect class="bf" width="{100 * n / mx:.1f}" height="10" rx="5"/></svg><b class="mono">{n}</b></li>' for s, n in top)
+                   f'<rect class="bf" width="{100 * n / mx:.1f}" height="10" rx="5"/></svg><b>{n}</b></li>' for s, n in top)
     return f'''
           <figure class="chart bars" data-reveal>
             <figcaption><h3>Most-used technologies</h3><p>Number of my projects on this page that use each one.</p></figcaption>
@@ -260,7 +241,7 @@ def tech_bars():
 
 
 def skills():
-    groups = "".join(f'<div class="skill-group" data-reveal><h3 class="mono">{e(g)}</h3><ul class="logo-grid">' +
+    groups = "".join(f'<div class="skill-group" data-reveal><h3>{e(g)}</h3><ul class="logo-grid">' +
                      "".join(f'<li>{logo(s, "lg lg-tile")}<span>{e(name(s))}</span></li>' for s in items) +
                      "</ul></div>" for g, items in C.SKILLS)
     prac = "".join(f"<li>{e(p)}</li>" for p in C.PRACTICES)
@@ -268,9 +249,9 @@ def skills():
     <section class="section" id="skills" aria-labelledby="skills-title">
       <div class="wrap">
         {sec_head("03", "Skills", "skills-title")}
-        <div class="charts">{donut()}{tech_bars()}</div>
+        <div class="charts">{tech_bars()}</div>
         <div class="skills">{groups}
-          <div class="skill-group practices" data-reveal><h3 class="mono">Practices</h3><ul class="chips-plain">{prac}</ul></div>
+          <div class="skill-group practices" data-reveal><h3>Practices</h3><ul class="chips-plain">{prac}</ul></div>
         </div>
       </div>
     </section>'''
@@ -280,20 +261,20 @@ def contests():
     cards = []
     for c in C.CONTESTS:
         pre = f'<span class="small">{e(c["prefix"])}</span> ' if c.get("prefix") else ""
-        num = (f'<p class="rank-num mono">{pre}<span data-count="{c["count"]}" data-suffix="{e(c["suffix"])}">{c["count"]}{e(c["suffix"])}</span></p>'
-               if pre else f'<p class="rank-num mono" data-count="{c["count"]}" data-suffix="{e(c["suffix"])}">{e(c["num"])}</p>')
+        num = (f'<p class="rank-num">{pre}<span data-count="{c["count"]}" data-suffix="{e(c["suffix"])}">{c["count"]}{e(c["suffix"])}</span></p>'
+               if pre else f'<p class="rank-num" data-count="{c["count"]}" data-suffix="{e(c["suffix"])}">{e(c["num"])}</p>')
         bar = ""
         if "ahead" in c:
             bar = (f'<div class="ahead"><svg viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true">'
                    f'<rect width="100" height="8" rx="4" fill="#eef3fa"/><rect class="af" width="{c["ahead"]}" height="8" rx="4"/></svg>'
-                   f'<p class="mono">Ahead of {c["ahead"]}% of participants</p></div>')
+                   f'<p>Ahead of {c["ahead"]}% of participants</p></div>')
         cards.append(f'''
           <li class="rank" data-reveal>
             <span class="rank-logo">{logo(c["logo"], "lg lg-rank")}</span>
             {num}
-            <p class="rank-of mono">{e(c["of"])}</p>
+            <p class="rank-of">{e(c["of"])}</p>
             <p class="rank-name">{e(c["name"])}</p>
-            <p class="rank-year mono">{e(c["year"])}</p>
+            <p class="rank-year">{e(c["year"])}</p>
             {bar}
           </li>''')
     return f'''
@@ -308,13 +289,17 @@ def contests():
 
 
 def contact():
+    plats = "".join(f'<li>{logo(s, "lg lg-plat")}<span>{e(t)}</span></li>' for s, t in C.PLATFORMS)
+    csv = ", ".join(C.RESUME_SKILLS)
     return f'''
     <section class="section contact" id="contact" aria-labelledby="contact-title">
       <div class="wrap contact-grid">
         <div class="avatar" data-reveal>{img("assets/portrait-contact.webp", 640, 640, "Homam Manasra")}</div>
         <div>
           {sec_head("05", "Contact", "contact-title")}
-          <p class="contact-line" data-reveal>Happy to talk about payments, distributed systems, mobile, or a contest problem.</p>
+          <p class="contact-line" data-reveal>{e(C.CONTACT_LINE)}</p>
+          <ul class="platforms" data-reveal>{plats}</ul>
+          <p class="skills-csv" data-reveal><strong>Skills:</strong> {e(csv)}</p>
           <div class="cta" data-reveal>
             {ext(C.LINKEDIN, "Message on LinkedIn", cls="btn btn-primary", icon="linkedin")}
             {ext(C.GITHUB, "github.com/homeo26", icon="github")}
@@ -331,21 +316,21 @@ PAGE = f'''<!doctype html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://nasrapack.com https://greenbranchs.com; object-src 'none'; base-uri 'self'; form-action 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <title>Homam Manasra · Full-Stack Software Engineer</title>
-  <meta name="description" content="Homam Manasra, full-stack software engineer and SDE I at Amazon in Amman, Jordan. Payment systems, Android, React Native and web projects, competitive programming.">
+  <title>Homam Manasra · Software Engineer</title>
+  <meta name="description" content="Homam Manasra, software engineer at Amazon in Amman, Jordan. Payment systems, Android, iOS and web projects, competitive programming.">
   <link rel="canonical" href="https://homeo26.github.io/">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Homam Manasra · Full-Stack Software Engineer">
-  <meta property="og:description" content="SDE I at Amazon. Payment systems, Android, React Native and web projects, competitive programming.">
+  <meta property="og:title" content="Homam Manasra · Software Engineer">
+  <meta property="og:description" content="Software engineer at Amazon. Payment systems, Android, iOS and web projects, competitive programming.">
   <meta property="og:url" content="https://homeo26.github.io/">
   <meta property="og:image" content="https://homeo26.github.io/assets/portrait-contact.webp">
   <meta name="theme-color" content="#ffffff">
   <link rel="icon" href="logo.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
   <link rel="preload" href="assets/portrait-hero.webp" as="image" type="image/webp">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="assets/logos.css">
@@ -364,7 +349,7 @@ PAGE = f'''<!doctype html>
   <main id="main">{hero()}{experience()}{projects()}{skills()}{contests()}{contact()}
   </main>
   <footer class="foot">
-    <div class="wrap foot-inner mono">
+    <div class="wrap foot-inner">
       <span>© <span id="year">2026</span> Homam Manasra</span>
       <span class="foot-note">Logos are trademarks of their owners.</span>
       <a href="#top">Back to top ↑</a>
@@ -374,9 +359,10 @@ PAGE = f'''<!doctype html>
 </html>
 '''
 
+if re.search(r"[\u0600-\u06FF]", PAGE):
+    raise SystemExit("Arabic script found in the page; use English only.")
 css = ["/* Generated by tools/build.py: logo colours, darkened where needed to reach 3:1 on white. */"]
 css += [f'.lg[data-l="{k}"]{{color:{v["color"]}}}' for k, v in LOGOS.items()]
-css += [f'.sw[data-c="{k}"]{{background:{v}}}' for k, v in C.LANG_COLORS.items()]
 open(os.path.join(ROOT, "assets", "logos.css"), "w").write("\n".join(css) + "\n")
 open(os.path.join(ROOT, "index.html"), "w").write(PAGE)
 print(f"index.html {len(PAGE) // 1024} KB, {len(C.PROJECTS)} public projects + featured, {PAGE.count('<use ')} logo uses")

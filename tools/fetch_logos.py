@@ -15,7 +15,7 @@ BRANDS = [
     "nodedotjs", "flask", "postgresql", "mysql", "sqlite", "firebase", "googlecloud", "docker", "kubernetes",
     "githubactions", "gradle", "git", "linux", "github", "jupyter", "pandas", "numpy", "scikitlearn", "homebrew",
     "pypi", "claude", "netlify", "yaml", "modelcontextprotocol", "codeforces", "leetcode", "ieee", "facebook",
-    "androidauto", "youtube", "whatsapp", "mermaid", "json",
+    "androidauto", "youtube", "whatsapp", "mermaid", "json", "apple",
 ]
 # Marks no longer shipped by Simple Icons 16 (slug: title, brand hex, path from an earlier release).
 EXTRA_BRANDS = {
@@ -47,6 +47,12 @@ GLYPHS = {
     "pdf": ("PDF", '<path d="M6 2.5h8.5L19 7v14.5H6z"/><path d="M14.5 2.5V7H19M9 13h6M9 16.5h4"/>'),
     "globe": ("Website", '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/>'),
     "users": ("People", '<circle cx="9" cy="8" r="3.2"/><path d="M3 20c.6-3.3 3-5.3 6-5.3s5.4 2 6 5.3"/><path d="M16 5.2a3 3 0 0 1 0 5.6M18.5 14.9c1.4.8 2.3 2.5 2.6 5.1"/>'),
+    "desktop": ("Desktop", '<rect x="2.5" y="4" width="19" height="13" rx="2"/><path d="M8.5 21h7M12 17v4"/>'),
+    "server": ("Backend", '<rect x="3.5" y="3.5" width="17" height="7" rx="1.8"/><rect x="3.5" y="13.5" width="17" height="7" rx="1.8"/><path d="M7.5 7h.01M7.5 17h.01M11.5 7h5M11.5 17h5"/>'),
+    "pause": ("Pause", '<path d="M9 6v12M15 6v12"/>'),
+    "play": ("Play", '<path d="M8 5.5v13l10.5-6.5z"/>'),
+    "chev-l": ("Previous", '<path d="m14.5 6-6 6 6 6"/>'),
+    "chev-r": ("Next", '<path d="m9.5 6 6 6-6 6"/>'),
     "bell": ("Notifications", '<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15z"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0"/>'),
 }
 

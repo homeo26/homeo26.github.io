@@ -51,6 +51,7 @@
 .lg[data-l="whatsapp"]{color:#1fa85b}
 .lg[data-l="mermaid"]{color:#ff3670}
 .lg[data-l="json"]{color:#000000}
+.lg[data-l="apple"]{color:#000000}
 .lg[data-l="linkedin"]{color:#0a66c2}
 .lg[data-l="aws"]{color:#1e3a8a}
 .lg[data-l="dynamodb"]{color:#1e3a8a}
@@ -74,9 +75,10 @@
 .lg[data-l="pdf"]{color:#1e3a8a}
 .lg[data-l="globe"]{color:#1e3a8a}
 .lg[data-l="users"]{color:#1e3a8a}
+.lg[data-l="desktop"]{color:#1e3a8a}
+.lg[data-l="server"]{color:#1e3a8a}
+.lg[data-l="pause"]{color:#1e3a8a}
+.lg[data-l="play"]{color:#1e3a8a}
+.lg[data-l="chev-l"]{color:#1e3a8a}
+.lg[data-l="chev-r"]{color:#1e3a8a}
 .lg[data-l="bell"]{color:#1e3a8a}
-.sw[data-c="TypeScript"]{background:#2563eb}
-.sw[data-c="Java"]{background:#0b1f3a}
-.sw[data-c="Jupyter Notebook"]{background:#60a5fa}
-.sw[data-c="Python"]{background:#1e40af}
-.sw[data-c="Other"]{background:#c9d5e8}

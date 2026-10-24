@@ -100,8 +100,8 @@ VOICE = _frame(f'''
 VAC = _frame(f'''
   <rect x="30" y="26" width="260" height="148" rx="12" fill="{NAVY}"/>
   <circle cx="48" cy="42" r="4.5" fill="#7fb0ff"/><circle cx="62" cy="42" r="4.5" fill="#24406e"/><circle cx="76" cy="42" r="4.5" fill="#24406e"/>
-  <text x="46" y="74" fill="#7fb0ff" font-family="JetBrains Mono, monospace" font-size="13">$</text>
-  <text x="60" y="74" fill="{WHITE}" font-family="JetBrains Mono, monospace" font-size="13">vac clean --images</text>
+  <text x="46" y="74" fill="#7fb0ff" font-family="IBM Plex Sans, sans-serif" font-size="13">$</text>
+  <text x="60" y="74" fill="{WHITE}" font-family="IBM Plex Sans, sans-serif" font-size="13">vac clean --images</text>
   <g class="a-junk">
     <rect class="a-j a-j1" x="46" y="88" width="190" height="9" rx="4.5" fill="#3b5b8f"/>
     <rect class="a-j a-j2" x="46" y="104" width="226" height="9" rx="4.5" fill="#f59e0b"/>
@@ -147,7 +147,7 @@ def _tree():
     nodes += [f'<circle class="a-tn a-l1" cx="{x}" cy="{y}" r="12" fill="{MID}"/>' for x, y in lv[1]]
     for k, (x, y) in enumerate(lv[2]):
         nodes.append(f'<g class="a-tn a-l2"><circle cx="{x}" cy="{y}" r="11" fill="{WHITE}" stroke="{BLUE}" stroke-width="2.5"/>'
-                     f'<text x="{x}" y="{y + 4.5}" text-anchor="middle" fill="{NAVY}" font-family="JetBrains Mono, monospace" font-weight="700" font-size="12">{letters[k]}</text></g>')
+                     f'<text x="{x}" y="{y + 4.5}" text-anchor="middle" fill="{NAVY}" font-family="IBM Plex Sans, sans-serif" font-weight="700" font-size="12">{letters[k]}</text></g>')
     return _frame(f'<g stroke="{LINE}" stroke-width="2.5">{"".join(edges)}</g>{"".join(nodes)}', "tree")
 
 
@@ -166,17 +166,5 @@ LEGAL = _frame(f'''
     <path d="M190 98a16 7 0 0 0 32 0zM278 98a16 7 0 0 0 32 0z" fill="{BLUE}"/></g>
   <circle cx="250" cy="40" r="7" fill="{BLUE}"/>''', "legal")
 
-GREEN = _frame(f'''
-  <rect x="26" y="22" width="268" height="156" rx="12" fill="{WHITE}" stroke="{LINE}" stroke-width="2"/>
-  <rect x="26" y="22" width="268" height="30" rx="12" fill="#f0f7ef"/><rect x="26" y="40" width="268" height="12" fill="#f0f7ef"/>
-  <image class="a-logo" href="assets/logo-green-branch.webp" x="252" y="25" width="24" height="24"/>
-  <rect x="140" y="31" width="100" height="8" rx="4" fill="#cfe5cc"/>
-  <g class="a-cardg a-g1"><rect x="196" y="64" width="84" height="98" rx="8" fill="#f0f7ef"/><rect x="204" y="72" width="68" height="40" rx="5" fill="#9ccf96"/>
-    <rect x="204" y="122" width="60" height="6" rx="3" fill="#2f7d32"/><rect x="204" y="134" width="44" height="5" rx="2.5" fill="#cfe5cc"/></g>
-  <g class="a-cardg a-g2"><rect x="104" y="64" width="84" height="98" rx="8" fill="#f0f7ef"/><rect x="112" y="72" width="68" height="40" rx="5" fill="#6fb867"/>
-    <rect x="112" y="122" width="60" height="6" rx="3" fill="#2f7d32"/><rect x="112" y="134" width="44" height="5" rx="2.5" fill="#cfe5cc"/></g>
-  <g class="a-play"><rect x="40" y="64" width="56" height="98" rx="8" fill="#14532d"/><circle cx="68" cy="113" r="16" fill="{WHITE}"/>
-    <path d="M63 105v16l13-8z" fill="#14532d"/></g>''', "green")
-
 PROJECT_ART = {"split": SPLIT, "voice": VOICE, "vac": VAC, "carpool": CARPOOL, "scatter": SCATTER, "tree": TREE,
-               "legal": LEGAL, "green": GREEN}
+               "legal": LEGAL}

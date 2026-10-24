@@ -363,6 +363,13 @@
   "contrast": 21.0,
   "kind": "brand"
  },
+ "apple": {
+  "title": "Apple",
+  "color": "#000000",
+  "brand": "#000000",
+  "contrast": 21.0,
+  "kind": "brand"
+ },
  "linkedin": {
   "title": "LinkedIn",
   "color": "#0a66c2",
@@ -477,6 +484,36 @@
  },
  "users": {
   "title": "People",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "desktop": {
+  "title": "Desktop",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "server": {
+  "title": "Backend",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "pause": {
+  "title": "Pause",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "play": {
+  "title": "Play",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "chev-l": {
+  "title": "Previous",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "chev-r": {
+  "title": "Next",
   "color": "#1e3a8a",
   "kind": "glyph"
  },
