@@ -65,7 +65,7 @@ const FRAG = /* glsl */`
     if (d > 0.5) discard;
     float soft = smoothstep(0.5, 0.12, d);
     vec3 col = mix(uBase, uAccent, smoothstep(0.05, 0.6, vHeat));
-    gl_FragColor = vec4(col, (0.26 + vHeat * 0.72) * soft * vFade);
+    gl_FragColor = vec4(col, (0.22 + vHeat * 0.74) * soft * vFade);
   }
 `;
 
@@ -118,8 +118,8 @@ async function init() {
     uRipples: { value: ripples },
     uSize: { value: small ? 3.0 : 2.6 },
     uPixelRatio: { value: 1 },
-    uBase: { value: new THREE.Color('#ece2d2') },
-    uAccent: { value: new THREE.Color('#ed7d27') },
+    uBase: { value: new THREE.Color('#1e3a8a') },
+    uAccent: { value: new THREE.Color('#2563eb') },
   };
   const mat = new THREE.ShaderMaterial({
     vertexShader: VERT, fragmentShader: FRAG, uniforms,
@@ -246,7 +246,7 @@ async function init() {
     let lit = 0, warm = 0;
     for (let i = 0; i < px.length; i += 4) {
       if (px[i + 3] > 8) lit++;
-      if (px[i + 3] > 40 && px[i] > px[i + 2] + 60) warm++;
+      if (px[i + 3] > 140) warm++; // only points the cursor or a ripple has lifted get this opaque
     }
     return { lit, warm };
   };

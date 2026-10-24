@@ -1,0 +1,488 @@
+{
+ "openjdk": {
+  "title": "OpenJDK",
+  "color": "#000000",
+  "brand": "#000000",
+  "contrast": 21.0,
+  "kind": "brand"
+ },
+ "kotlin": {
+  "title": "Kotlin",
+  "color": "#7f52ff",
+  "brand": "#7F52FF",
+  "contrast": 4.61,
+  "kind": "brand"
+ },
+ "typescript": {
+  "title": "TypeScript",
+  "color": "#3178c6",
+  "brand": "#3178C6",
+  "contrast": 4.53,
+  "kind": "brand"
+ },
+ "javascript": {
+  "title": "JavaScript",
+  "color": "#9d9629",
+  "brand": "#F7DF1E",
+  "contrast": 3.08,
+  "kind": "brand"
+ },
+ "python": {
+  "title": "Python",
+  "color": "#3776ab",
+  "brand": "#3776AB",
+  "contrast": 4.84,
+  "kind": "brand"
+ },
+ "cplusplus": {
+  "title": "C++",
+  "color": "#00599c",
+  "brand": "#00599C",
+  "contrast": 7.22,
+  "kind": "brand"
+ },
+ "apachegroovy": {
+  "title": "Apache Groovy",
+  "color": "#4298b8",
+  "brand": "#4298B8",
+  "contrast": 3.27,
+  "kind": "brand"
+ },
+ "ruby": {
+  "title": "Ruby",
+  "color": "#cc342d",
+  "brand": "#CC342D",
+  "contrast": 5.13,
+  "kind": "brand"
+ },
+ "gnubash": {
+  "title": "GNU Bash",
+  "color": "#4da725",
+  "brand": "#4EAA25",
+  "contrast": 3.06,
+  "kind": "brand"
+ },
+ "swift": {
+  "title": "Swift",
+  "color": "#f05138",
+  "brand": "#F05138",
+  "contrast": 3.54,
+  "kind": "brand"
+ },
+ "react": {
+  "title": "React",
+  "color": "#459ebd",
+  "brand": "#61DAFB",
+  "contrast": 3.05,
+  "kind": "brand"
+ },
+ "expo": {
+  "title": "Expo",
+  "color": "#1c2024",
+  "brand": "#1C2024",
+  "contrast": 16.39,
+  "kind": "brand"
+ },
+ "nextdotjs": {
+  "title": "Next.js",
+  "color": "#000000",
+  "brand": "#000000",
+  "contrast": 21.0,
+  "kind": "brand"
+ },
+ "android": {
+  "title": "Android",
+  "color": "#2fa76f",
+  "brand": "#3DDC84",
+  "contrast": 3.05,
+  "kind": "brand"
+ },
+ "tailwindcss": {
+  "title": "Tailwind CSS",
+  "color": "#07a1be",
+  "brand": "#06B6D4",
+  "contrast": 3.07,
+  "kind": "brand"
+ },
+ "html5": {
+  "title": "HTML5",
+  "color": "#e34f26",
+  "brand": "#E34F26",
+  "contrast": 3.88,
+  "kind": "brand"
+ },
+ "css": {
+  "title": "CSS",
+  "color": "#663399",
+  "brand": "#663399",
+  "contrast": 8.41,
+  "kind": "brand"
+ },
+ "framer": {
+  "title": "Framer",
+  "color": "#0055ff",
+  "brand": "#0055FF",
+  "contrast": 5.61,
+  "kind": "brand"
+ },
+ "springboot": {
+  "title": "Spring Boot",
+  "color": "#63a43e",
+  "brand": "#6DB33F",
+  "contrast": 3.04,
+  "kind": "brand"
+ },
+ "nodedotjs": {
+  "title": "Node.js",
+  "color": "#5fa04e",
+  "brand": "#5FA04E",
+  "contrast": 3.17,
+  "kind": "brand"
+ },
+ "flask": {
+  "title": "Flask",
+  "color": "#37a0b8",
+  "brand": "#3BABC3",
+  "contrast": 3.05,
+  "kind": "brand"
+ },
+ "postgresql": {
+  "title": "PostgreSQL",
+  "color": "#4169e1",
+  "brand": "#4169E1",
+  "contrast": 4.85,
+  "kind": "brand"
+ },
+ "mysql": {
+  "title": "MySQL",
+  "color": "#4479a1",
+  "brand": "#4479A1",
+  "contrast": 4.67,
+  "kind": "brand"
+ },
+ "sqlite": {
+  "title": "SQLite",
+  "color": "#003b57",
+  "brand": "#003B57",
+  "contrast": 11.91,
+  "kind": "brand"
+ },
+ "firebase": {
+  "title": "Firebase",
+  "color": "#dd2c00",
+  "brand": "#DD2C00",
+  "contrast": 4.74,
+  "kind": "brand"
+ },
+ "googlecloud": {
+  "title": "Google Cloud",
+  "color": "#4285f4",
+  "brand": "#4285F4",
+  "contrast": 3.56,
+  "kind": "brand"
+ },
+ "docker": {
+  "title": "Docker",
+  "color": "#2496ed",
+  "brand": "#2496ED",
+  "contrast": 3.15,
+  "kind": "brand"
+ },
+ "kubernetes": {
+  "title": "Kubernetes",
+  "color": "#326ce5",
+  "brand": "#326CE5",
+  "contrast": 4.76,
+  "kind": "brand"
+ },
+ "githubactions": {
+  "title": "GitHub Actions",
+  "color": "#2088ff",
+  "brand": "#2088FF",
+  "contrast": 3.48,
+  "kind": "brand"
+ },
+ "gradle": {
+  "title": "Gradle",
+  "color": "#02303a",
+  "brand": "#02303A",
+  "contrast": 14.13,
+  "kind": "brand"
+ },
+ "git": {
+  "title": "Git",
+  "color": "#f03c2e",
+  "brand": "#F03C2E",
+  "contrast": 3.9,
+  "kind": "brand"
+ },
+ "linux": {
+  "title": "Linux",
+  "color": "#af912b",
+  "brand": "#FCC624",
+  "contrast": 3.04,
+  "kind": "brand"
+ },
+ "github": {
+  "title": "GitHub",
+  "color": "#181717",
+  "brand": "#181717",
+  "contrast": 17.89,
+  "kind": "brand"
+ },
+ "jupyter": {
+  "title": "Jupyter",
+  "color": "#ea7327",
+  "brand": "#F37626",
+  "contrast": 3.01,
+  "kind": "brand"
+ },
+ "pandas": {
+  "title": "pandas",
+  "color": "#150458",
+  "brand": "#150458",
+  "contrast": 17.64,
+  "kind": "brand"
+ },
+ "numpy": {
+  "title": "NumPy",
+  "color": "#013243",
+  "brand": "#013243",
+  "contrast": 13.65,
+  "kind": "brand"
+ },
+ "scikitlearn": {
+  "title": "scikit-learn",
+  "color": "#d18022",
+  "brand": "#F7931E",
+  "contrast": 3.08,
+  "kind": "brand"
+ },
+ "homebrew": {
+  "title": "Homebrew",
+  "color": "#bd8a3e",
+  "brand": "#FBB040",
+  "contrast": 3.06,
+  "kind": "brand"
+ },
+ "pypi": {
+  "title": "PyPI",
+  "color": "#3775a9",
+  "brand": "#3775A9",
+  "contrast": 4.91,
+  "kind": "brand"
+ },
+ "claude": {
+  "title": "Claude",
+  "color": "#d97757",
+  "brand": "#D97757",
+  "contrast": 3.12,
+  "kind": "brand"
+ },
+ "netlify": {
+  "title": "Netlify",
+  "color": "#02a59e",
+  "brand": "#00C7B7",
+  "contrast": 3.05,
+  "kind": "brand"
+ },
+ "yaml": {
+  "title": "YAML",
+  "color": "#cb171e",
+  "brand": "#CB171E",
+  "contrast": 5.71,
+  "kind": "brand"
+ },
+ "modelcontextprotocol": {
+  "title": "Model Context Protocol",
+  "color": "#000000",
+  "brand": "#000000",
+  "contrast": 21.0,
+  "kind": "brand"
+ },
+ "codeforces": {
+  "title": "Codeforces",
+  "color": "#1f8acb",
+  "brand": "#1F8ACB",
+  "contrast": 3.78,
+  "kind": "brand"
+ },
+ "leetcode": {
+  "title": "LeetCode",
+  "color": "#c9841e",
+  "brand": "#FFA116",
+  "contrast": 3.09,
+  "kind": "brand"
+ },
+ "ieee": {
+  "title": "IEEE",
+  "color": "#00629b",
+  "brand": "#00629B",
+  "contrast": 6.52,
+  "kind": "brand"
+ },
+ "facebook": {
+  "title": "Facebook",
+  "color": "#0866ff",
+  "brand": "#0866FF",
+  "contrast": 4.82,
+  "kind": "brand"
+ },
+ "androidauto": {
+  "title": "Android Auto",
+  "color": "#2fa76f",
+  "brand": "#3DDC84",
+  "contrast": 3.05,
+  "kind": "brand"
+ },
+ "youtube": {
+  "title": "YouTube",
+  "color": "#ff0000",
+  "brand": "#FF0000",
+  "contrast": 4.0,
+  "kind": "brand"
+ },
+ "whatsapp": {
+  "title": "WhatsApp",
+  "color": "#1fa85b",
+  "brand": "#25D366",
+  "contrast": 3.08,
+  "kind": "brand"
+ },
+ "mermaid": {
+  "title": "Mermaid",
+  "color": "#ff3670",
+  "brand": "#FF3670",
+  "contrast": 3.49,
+  "kind": "brand"
+ },
+ "json": {
+  "title": "JSON",
+  "color": "#000000",
+  "brand": "#000000",
+  "contrast": 21.0,
+  "kind": "brand"
+ },
+ "linkedin": {
+  "title": "LinkedIn",
+  "color": "#0a66c2",
+  "brand": "#0A66C2",
+  "contrast": 5.69,
+  "kind": "brand"
+ },
+ "aws": {
+  "title": "AWS",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "dynamodb": {
+  "title": "DynamoDB",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "reactnative": {
+  "title": "React Native",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "lock": {
+  "title": "Private",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "trophy": {
+  "title": "Trophy",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "cap": {
+  "title": "Graduation",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "mic": {
+  "title": "Microphone",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "film": {
+  "title": "Video",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "terminal": {
+  "title": "Terminal",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "chart": {
+  "title": "Chart",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "tree": {
+  "title": "Tree",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "car": {
+  "title": "Car",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "phone": {
+  "title": "Phone",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "card": {
+  "title": "Card",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "shield": {
+  "title": "Shield",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "stream": {
+  "title": "Events",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "devices": {
+  "title": "Devices",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "external": {
+  "title": "Open",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "arrow": {
+  "title": "Arrow",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "pdf": {
+  "title": "PDF",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "globe": {
+  "title": "Website",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "users": {
+  "title": "People",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ },
+ "bell": {
+  "title": "Notifications",
+  "color": "#1e3a8a",
+  "kind": "glyph"
+ }
+}

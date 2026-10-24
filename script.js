@@ -208,6 +208,45 @@
     });
   }
 
+  /* ---------- Logos orbiting the portrait ---------- */
+  const visual = $('.hero-visual');
+  const portrait = $('.portrait');
+  const orbs = $$('.orb');
+  if (visual && portrait && orbs.length) {
+    let geo = null, raf = 0, onScreen = true;
+    const measure = () => {
+      if (!orbs[0].offsetParent) { geo = null; return; }
+      const v = visual.getBoundingClientRect(), p = portrait.getBoundingClientRect();
+      const rx = clamp(p.width * 0.92, 170, 320);
+      geo = { cx: p.left - v.left + p.width * 0.5, cy: p.top - v.top + p.height * 0.36, rx, ry: rx * 0.3 };
+    };
+    const place = t => {
+      if (!geo) return;
+      const n = orbs.length;
+      orbs.forEach((o, i) => {
+        const a = t * 0.00016 + (i / n) * Math.PI * 2;
+        const depth = Math.sin(a); // > 0 is the near side of the ring
+        const k = (depth + 1) / 2;
+        const x = geo.cx + geo.rx * Math.cos(a), y = geo.cy + geo.ry * depth;
+        o.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) scale(${(0.72 + 0.34 * k).toFixed(3)})`;
+        o.style.opacity = (0.45 + 0.55 * k).toFixed(3);
+        o.style.zIndex = depth > 0 ? '3' : '1';
+      });
+    };
+    const tick = t => { place(t); raf = requestAnimationFrame(tick); };
+    const run = () => {
+      cancelAnimationFrame(raf);
+      measure();
+      if (reduced()) { place(0); return; }
+      if (onScreen && !document.hidden && geo) raf = requestAnimationFrame(tick);
+    };
+    if (portrait.complete) run(); else portrait.addEventListener('load', run, { once: true });
+    new ResizeObserver(run).observe(visual);
+    new IntersectionObserver(([en]) => { onScreen = en.isIntersecting; run(); }).observe(visual);
+    document.addEventListener('visibilitychange', run);
+    reduceMQ.addEventListener?.('change', run);
+  }
+
   /* ---------- Hero dot field (2D fallback when WebGL is unavailable) ---------- */
   window.__startDotField = () => {
   const canvas = $('.field');
@@ -238,17 +277,17 @@
       ctx.clearRect(0, 0, w, h);
       m.x += (m.tx - m.x) * 0.14; m.y += (m.ty - m.y) * 0.14;
       const still = reduced();
-      ctx.fillStyle = '#ece2d2';
+      ctx.fillStyle = '#1e3a8a';
       const hot = [];
       for (let i = 0; i < dots.length; i += 2) {
         const x = dots[i], y = dots[i + 1];
         const dx = x - m.x, dy = y - m.y, d2 = dx * dx + dy * dy;
         if (d2 < R2) { hot.push(x, y, dx, dy, d2); continue; }
         const wave = still ? 0.5 : (Math.sin(x * 0.011 + y * 0.016 - t * 0.0011) + 1) * 0.5;
-        ctx.globalAlpha = 0.06 + wave * 0.09;
+        ctx.globalAlpha = 0.08 + wave * 0.12;
         ctx.fillRect(x - 0.8, y - 0.8, 1.6, 1.6);
       }
-      ctx.fillStyle = '#ed7d27';
+      ctx.fillStyle = '#2563eb';
       for (let i = 0; i < hot.length; i += 5) {
         const d = Math.sqrt(hot[i + 4]) || 1;
         let k = 1 - d / R; k *= k;
