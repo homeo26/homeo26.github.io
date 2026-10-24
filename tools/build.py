@@ -82,8 +82,8 @@ def media(p):
 
 # ---------------------------------------------------------------- sections
 def hero():
-    stats = "".join(f'<div{" class=\"hl\"" if k == 0 else ""}><dt>{e(lbl)}</dt><dd data-count="{n}" data-suffix="{e(sfx)}">{e(txt)}</dd></div>'
-                    for k, (txt, n, sfx, lbl) in enumerate(C.HERO_STATS))
+    stats = "".join(f'<div><dt>{e(lbl)}</dt><dd data-count="{n}" data-suffix="{e(sfx)}">{e(txt)}</dd></div>'
+                    for txt, n, sfx, lbl in C.HERO_STATS)
     orbit = "".join(f'<span class="orb" title="{e(name(s))}">{logo(s)}</span>' for s in C.ORBIT)
     return f'''
     <section class="hero" aria-labelledby="hero-title">
@@ -188,6 +188,14 @@ def robou3_slide():
             </article>'''
 
 
+def app_icon(p, cls):
+    """The project's own app icon, or a matching glyph tile when it has none."""
+    nm = p.get("name", p["repo"])
+    if p.get("icon"):
+        return img(p["icon"], 192, 192, f"{nm} app icon", cls, lazy=False)
+    return f'<span class="{cls} glyph-ico">{logo(p.get("glyph", "github"), "lg")}</span>'
+
+
 def public_slide(p, n, total):
     nm = p.get("name", p["repo"])
     live = ""
@@ -199,7 +207,7 @@ def public_slide(p, n, total):
             <article class="spot-slide" aria-roledescription="slide" aria-label="{n} of {total}: {e(nm)}">
               <div class="feat-copy">
                 <p class="card-kicker">{e(p["kicker"])}</p>
-                <div class="feat-title"><span class="feat-ico">{logo("github", "lg")}</span><h3>{e(nm)}</h3></div>
+                <div class="feat-title">{app_icon(p, "feat-logo")}<h3>{e(nm)}</h3></div>
                 <p class="badge-public">{logo("github", "lg")}Public repository · open source</p>
                 <p>{e(p["desc"])}</p>
                 {tags(p["tags"])}
@@ -260,7 +268,7 @@ def projects():
             {media(p)}
             <div class="card-body">
               <p class="card-kicker">{e(p["kicker"])}</p>
-              <h3><a href="{C.GITHUB}/{p["repo"]}" target="_blank" rel="noopener noreferrer">{e(nm)}</a>{logo("github", "lg lg-gh")}</h3>
+              <h3>{app_icon(p, "card-ico")}<a href="{C.GITHUB}/{p["repo"]}" target="_blank" rel="noopener noreferrer">{e(nm)}</a>{logo("github", "lg lg-gh")}</h3>
               <p>{e(p["desc"])}</p>
               {live_link(p)}
               {tags(p["tags"])}

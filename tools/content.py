@@ -10,12 +10,11 @@ CODEFORCES = "https://codeforces.com/profile/homeo"
 LEETCODE = "https://leetcode.com/u/homeo/"
 EMAIL = "homam.manasra26@gmail.com"
 
-# The first stat is highlighted.
 HERO_STATS = [
-    ("10M+", 10, "M+", "Customers whose traffic my projects handle"),
-    ("100+", 100, "+", "Features & projects serving users"),
-    ("3+", 3, "+", "Years shipping software"),
-    ("2nd", 2, "nd", "Of 5,000+ in Amazon's internal coding contest"),
+    ("10M+", 10, "M+", "Customers served by my work"),
+    ("100+", 100, "+", "Features & projects shipped"),
+    ("3+", 3, "+", "Years building software"),
+    ("2nd", 2, "nd", "Of 5,000+ in a coding contest"),
 ]
 ROLE_TITLE = "Software Development Engineer"
 TAGLINE = "I deliver software solutions, from backend services to Android, iOS and web apps. At Amazon, I build payment systems."
@@ -133,14 +132,14 @@ FEATURED = {
 
 # media: ("art", name) | ("phones", [(src, w, h, alt), ...]) | ("browser", (src, w, h, alt))
 PROJECTS = [
-    {"repo": "byd-split-launcher", "cat": "android", "kicker": "Android · Automotive",
+    {"repo": "byd-split-launcher", "icon": "assets/icon-bydsplit.webp", "cat": "android", "kicker": "Android · Automotive",
      "desc": "Side-by-side split-screen for BYD DiLink car head units. No root, no laptop, about 16 KB.",
      "tags": ["openjdk", "android", ("devices", "Multi-window")], "media": ("art", "split")},
-    {"repo": "byd-dashvoice", "cat": "android", "kicker": "Android · Automotive",
+    {"repo": "byd-dashvoice", "icon": "assets/icon-dashvoice.webp", "cat": "android", "kicker": "Android · Automotive",
      "desc": "Offline English voice control for the BYD climate system. Vosk speech recognition drives the car's "
              "hardware API directly, with no root and no platform signature.",
      "tags": ["openjdk", "android", ("mic", "Vosk")], "media": ("art", "voice")},
-    {"repo": "vid-shrink", "cat": "android", "kicker": "Android",
+    {"repo": "vid-shrink", "icon": "assets/icon-vidshrink.webp", "cat": "android", "kicker": "Android",
      "desc": "Shrinks large videos in place with the phone's hardware HEVC encoder. Verified replacement, idempotent "
              "re-runs, no Gradle, about 66 KB.",
      "tags": ["openjdk", "android", ("film", "MediaCodec")],
@@ -149,11 +148,11 @@ PROJECTS = [
      "media": ("phones", [("assets/shots/vidshrink-main.webp", 360, 801, "vid-shrink main screen"),
                           ("assets/shots/vidshrink-scan.webp", 360, 801, "vid-shrink scanning for large videos"),
                           ("assets/shots/vidshrink-progress.webp", 360, 801, "vid-shrink encoding progress")])},
-    {"repo": "vac", "cat": "tools", "kicker": "CLI · PyPI · Homebrew",
+    {"repo": "vac", "glyph": "terminal", "cat": "tools", "kicker": "CLI · PyPI · Homebrew",
      "desc": "Cleans, prunes, archives and repairs AI coding-agent session logs for Kiro CLI and Claude Code, fixing "
              "sessions wedged by oversized payloads.",
      "tags": ["python", "pypi", "homebrew", "githubactions"], "media": ("art", "vac")},
-    {"repo": "coup-game", "cat": "mobile", "kicker": "iOS · Android",
+    {"repo": "coup-game", "icon": "assets/icon-coup.webp", "cat": "mobile", "kicker": "iOS · Android",
      "desc": "The bluffing card game Coup, online for 2–6 players with 4-letter room codes, plus offline bots. Arabic "
              "and English, no server.",
      "tags": ["reactnative", "expo", "firebase", "typescript"],
@@ -162,7 +161,7 @@ PROJECTS = [
      "media": ("phones", [("assets/shots/coup-home.webp", 360, 801, "Coup home screen"),
                           ("assets/shots/coup-table.webp", 360, 801, "Coup game table"),
                           ("assets/shots/coup-arabic.webp", 360, 801, "Coup in Arabic")])},
-    {"repo": "roojifeel", "cat": "mobile", "kicker": "iOS · Android",
+    {"repo": "roojifeel", "icon": "assets/icon-rooji.webp", "cat": "mobile", "kicker": "iOS · Android",
      "desc": "A private feelings journal built on the feelings wheel. Entries stay on the device.",
      "tags": ["reactnative", "expo", "sqlite", "typescript"],
      "showcase": {"phones": [("assets/shots/rooji-wheel.webp", 360, 780, "Feelings wheel"), ("assets/shots/rooji-home.webp", 360, 780, "Journal home"),
@@ -170,7 +169,7 @@ PROJECTS = [
      "media": ("phones", [("assets/shots/rooji-wheel.webp", 360, 780, "Feelings wheel"),
                           ("assets/shots/rooji-home.webp", 360, 780, "Journal home"),
                           ("assets/shots/rooji-stats.webp", 360, 780, "Mood statistics")])},
-    {"repo": "green-branch", "cat": "web", "kicker": "Web · Arabic RTL",
+    {"repo": "green-branch", "icon": "assets/icon-greenbranch.webp", "cat": "web", "kicker": "Web · Arabic RTL",
      "desc": "Arabic agriculture content platform: categorized guides, a video library that pulls the latest channel "
              "videos automatically, and consultation requests.",
      "tags": ["nextdotjs", "typescript", "tailwindcss", "framer"], "live": "https://greenbranchs.com",
@@ -181,27 +180,27 @@ PROJECTS = [
                              ("assets/shots/greenbranch-videos-phone.webp", 360, 779, "Green Branch video library on a phone")]},
      "media": ("site", (("assets/shots/greenbranch-desktop.webp", 1200, 750, "Green Branch website on desktop"),
                         ("assets/shots/greenbranch-phone.webp", 360, 779, "Green Branch website on a phone")))},
-    {"repo": "mashoora", "cat": "web", "kicker": "Web · Legal tech",
+    {"repo": "mashoora", "glyph": "users", "cat": "web", "kicker": "Web · Legal tech",
      "desc": "Legal consultation platform: paid private chat with lawyers, public legal Q&A, an AI legal chatbot and "
              "provider ratings.",
      "tags": ["springboot", "flask", "postgresql", "firebase"], "media": ("art", "legal"),
      "showcase": {"desktop": ("assets/shots/mashoora-diagram.webp", 1400, 801, "Mashoora class diagram"), "url": "github.com/homeo26/mashoora"}},
-    {"repo": "engagement-carpool", "cat": "web", "kicker": "Web · Local-first",
+    {"repo": "engagement-carpool", "glyph": "car", "cat": "web", "kicker": "Web · Local-first",
      "desc": "Plans event carpools: assign guests to cars, track confirmations, export to PDF. Auto-saves to YAML, no "
              "database.",
      "tags": ["javascript", "yaml", ("pdf", "PDF export")], "media": ("art", "carpool")},
-    {"repo": "bloomberg-data-warehouse-progresssoft", "name": "fx-data-warehouse", "cat": "data", "kicker": "Backend · Data",
+    {"repo": "bloomberg-data-warehouse-progresssoft", "glyph": "dynamodb", "name": "fx-data-warehouse", "cat": "data", "kicker": "Backend · Data",
      "desc": "FX deals warehouse modeled on Bloomberg's. Validates each row, rejects duplicate imports and persists "
              "without rollback.",
      "tags": ["springboot", "postgresql", "docker"],
      "showcase": {"desktop": ("assets/shots/fx-console.webp", 1200, 572, "FX data warehouse console output"), "url": "github.com/homeo26/fx-data-warehouse",
                   "overlay": ("assets/shots/fx-test1.webp", 900, 548, "FX data warehouse test case")},
      "media": ("browser", ("assets/shots/fx-banner.webp", 1200, 262, "FX data warehouse banner"))},
-    {"repo": "Machine-learning-on-online-education-", "name": "grade-prediction", "cat": "data", "kicker": "Machine learning",
+    {"repo": "Machine-learning-on-online-education-", "glyph": "chart", "name": "grade-prediction", "cat": "data", "kicker": "Machine learning",
      "desc": "Predicts student grades on an online education platform from 20+ features, with cleaning, encoding, "
              "scaling and sampling.",
      "tags": ["python", "pandas", "scikitlearn", "jupyter"], "media": ("art", "scatter")},
-    {"repo": "levelic-tree-cipher", "cat": "data", "kicker": "Algorithms",
+    {"repo": "levelic-tree-cipher", "glyph": "tree", "cat": "data", "kicker": "Algorithms",
      "desc": "A cipher that encodes text into a perfect tree; the key is the number of children per node.",
      "tags": ["cplusplus", ("tree", "Trees")], "media": ("art", "tree")},
 ]

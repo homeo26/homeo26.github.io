@@ -245,8 +245,11 @@
     const INTERVAL = 5500;
     let idx = 0, timer = 0, hovered = false, focused = false, visible = false, userPaused = reduced();
     bar.style.setProperty('--spot-ms', `${INTERVAL}ms`);
+    // The track takes the current slide's height, so shorter slides leave no empty space.
+    const fit = () => { track.style.height = `${slides[idx].offsetHeight}px`; };
     const mark = () => {
       slides.forEach((sl, k) => { sl.classList.toggle('active', k === idx); sl.inert = k !== idx; });
+      fit();
       dots.forEach((d, k) => (k === idx ? d.setAttribute('aria-current', 'true') : d.removeAttribute('aria-current')));
       count.textContent = `${idx + 1} / ${slides.length}`;
     };
@@ -295,7 +298,10 @@
     new IntersectionObserver(([en]) => { visible = en.isIntersecting; schedule(); }, { threshold: 0.35 }).observe(track);
     document.addEventListener('visibilitychange', schedule);
     if (lb) { lb.addEventListener('opened', schedule); lb.addEventListener('close', schedule); }
-    addEventListener('resize', () => track.scrollTo({ left: idx * track.clientWidth, behavior: 'auto' }));
+    addEventListener('resize', () => { fit(); track.scrollTo({ left: idx * track.clientWidth, behavior: 'auto' }); });
+    const ro = new ResizeObserver(fit); slides.forEach(sl => ro.observe(sl));
+    $$('img', spot).forEach(im => { if (!im.complete) im.addEventListener('load', fit, { once: true }); });
+    document.fonts?.ready.then(fit);
     setPauseUi(); mark();
     window.__spot = { running: () => timer !== 0, index: () => idx, interval: INTERVAL };
   }
