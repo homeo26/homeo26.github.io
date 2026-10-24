@@ -111,8 +111,10 @@ h1 { margin-top: 0; font-size: clamp(2.75rem, 6.6vw, 5.2rem); letter-spacing: -0
 .hero-loc .lg { width: 16px; height: 16px; color: var(--muted); }
 .lead { margin-top: 18px; max-width: 36ch; font-size: clamp(1.1rem, 1.6vw, 1.28rem); color: var(--ink); }
 .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
-.stats { margin: 40px 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; border-top: 1px solid var(--line); padding-top: 22px; }
-.stats div { display: flex; flex-direction: column-reverse; gap: 6px; }
+.stats { margin: 40px 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: start; gap: 18px; border-top: 1px solid var(--line); padding-top: 22px; }
+/* Number on top, label below, packed to the top so numbers line up even when labels wrap differently. */
+.stats div { display: flex; flex-direction: column; justify-content: flex-start; gap: 6px; min-width: 0; }
+.stats dd { order: -1; }
 .stats dt { font-size: 0.82rem; line-height: 1.35; color: var(--muted); }
 .stats dd { margin: 0; font: 700 clamp(1.55rem, 2.5vw, 2rem)/1 var(--sans); color: var(--accent); font-variant-numeric: tabular-nums; }
 
