@@ -301,13 +301,14 @@ def skills():
     groups = "".join(f'<div class="skill-group" data-reveal><h3>{e(g)}</h3><ul class="logo-grid">' +
                      "".join(f'<li>{logo(s, "lg lg-tile")}<span>{e(name(s))}</span></li>' for s in items) +
                      "</ul></div>" for g, items in C.SKILLS)
-    prac = "".join(f"<li>{e(p)}</li>" for p in C.PRACTICES)
+    topics = "".join(f'<div class="skill-group topic" data-reveal><h3>{logo(ic, "lg lg-topic")}{e(t)}</h3><ul class="chips-plain">' +
+                     "".join(f"<li>{e(x)}</li>" for x in items) + "</ul></div>" for ic, t, items in C.SKILL_TOPICS)
     return f'''
     <section class="section" id="skills" aria-labelledby="skills-title">
       <div class="wrap">
         {sec_head("03", "Skills", "skills-title")}
         <div class="skills">{groups}
-          <div class="skill-group practices" data-reveal><h3>Practices</h3><ul class="chips-plain">{prac}</ul></div>
+          {topics}
         </div>
       </div>
     </section>'''
@@ -346,7 +347,6 @@ def contests():
 
 def contact():
     plats = "".join(f'<li>{logo(s, "lg lg-plat")}<span>{e(t)}</span></li>' for s, t in C.PLATFORMS)
-    csv = ", ".join(C.RESUME_SKILLS)
     return f'''
     <section class="section contact" id="contact" aria-labelledby="contact-title">
       <div class="wrap contact-grid">
@@ -355,7 +355,6 @@ def contact():
           {sec_head("05", "Contact", "contact-title")}
           <p class="contact-line" data-reveal>{e(C.CONTACT_LINE)}</p>
           <ul class="platforms" data-reveal>{plats}</ul>
-          <p class="skills-csv" data-reveal><strong>Skills:</strong> {e(csv)}</p>
           <div class="cta" data-reveal>
             <a class="btn btn-primary" href="mailto:{C.EMAIL}">{logo("mail", "lg lg-btn")}Email me · {C.EMAIL}</a>
             {ext(C.LINKEDIN, "Message on LinkedIn", icon="linkedin")}

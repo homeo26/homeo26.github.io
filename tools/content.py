@@ -219,7 +219,15 @@ SKILLS = [
     ("Cloud & Tooling", ["aws", "googlecloud", "docker", "kubernetes", "githubactions", "gradle", "git", "github", "linux",
                          "modelcontextprotocol"]),
 ]
-PRACTICES = ["System design", "Distributed systems", "Concurrency", "Security reviews", "Algorithms", "TDD"]
+# Resume skills that aren't tools, grouped. Together with SKILLS above they cover the whole resume skills list.
+SKILL_TOPICS = [
+    ("tree", "Software Design", ["Object-oriented programming", "Data structures", "Algorithms", "Design patterns",
+                                 "Software design", "Code optimization", "Problem solving"]),
+    ("stream", "Systems & Scale", ["System design", "Distributed systems", "Scalability", "Concurrency", "Multithreading",
+                                   "Performance engineering", "Database internals", "Operating systems", "Computer networks"]),
+    ("server", "APIs & Delivery", ["RESTful APIs", "SOAP", "Unit testing", "TDD", "CI/CD", "Version control", "Agile"]),
+    ("shield", "Data & Security", ["SQL", "NoSQL", "Data analysis", "Machine learning", "AI", "Security", "Secure connections"]),
+]
 
 CONTESTS = [
     {"num": "2nd", "count": 2, "suffix": "nd", "of": "of 5,000+", "name": "Amazon internal coding competition",
@@ -238,6 +246,3 @@ CONTESTS = [
 
 CONTACT_LINE = "I can build the software you need: a website, an iOS or Android app, a desktop app, or the backend behind them."
 PLATFORMS = [("globe", "Websites"), ("apple", "iOS"), ("android", "Android"), ("desktop", "Desktop"), ("server", "Backend & cloud")]
-
-# Skills line from the resume, verbatim and in order.
-RESUME_SKILLS = ['Python', 'Java', 'Kotlin', 'Groovy', 'Ruby', 'C++', 'JavaScript', 'TypeScript', 'Bash Scripting', 'HTML', 'CSS', 'React.js', 'React Native', 'Next.js', 'Spring', 'Android', 'SQL', 'NoSQL', 'Linux', 'Git', 'GitHub', 'Version Control', 'Docker', 'Kubernetes', 'CI/CD', 'Model Context Protocol MCP', 'Object-Oriented Programming OOP', 'Data Structures', 'Algorithms', 'Design Patterns', 'Software Design', 'Code Optimization', 'System Design', 'Distributed Systems', 'Scalability', 'Concurrency', 'Multithreading', 'Operating Systems', 'Computer Networks', 'Database Internals', 'Performance Engineering', 'RESTful API', 'SOAP', 'Unit Testing', 'TDD', 'Agile', 'Data Analysis', 'AI', 'Machine Learning', 'AWS', 'GCP', 'Security', 'Secure Internet Connection', 'Problem Solving']
