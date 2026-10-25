@@ -394,6 +394,7 @@ PAGE = f'''<!doctype html>
   <meta name="description" content="{e(DESC)}">
   <meta name="author" content="Homam Manasra">
   <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="google-site-verification" content="SmUwQSA5brxP1DU5GfvlAZL5WU9U61glFrWdhUGgNXI">
   <link rel="canonical" href="{SITE}">
   <meta property="og:type" content="profile">
   <meta property="og:site_name" content="Homam Manasra">
